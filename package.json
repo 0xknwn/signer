@@ -6,14 +6,20 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "test:browser": "vitest run --config ./vitest-browser.config.ts",
+    "test:server": "vitest run --config ./vitest-server.config.ts",
+    "test": "npm run test:browser && npm run test:server",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "test:e2e": "playwright test",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/node": "^20.12.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.44.0",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
@@ -22,7 +28,9 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
+    "jsdom": "^24.0.0",
     "typescript": "^5.2.2",
-    "vite": "^5.2.0"
+    "vite": "^5.2.0",
+    "vitest": "^1.6.0"
   }
 }
