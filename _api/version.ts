@@ -12,7 +12,10 @@ export const isr = {
 };
 
 export default async function handler(request: Request) {
-  const response = new Response(JSON.stringify({ version: "dev" }), {
+  const res = await fetch(`${process.env.BACKEND_URL}/version`);
+  const out = await res.json();
+
+  const response = new Response(JSON.stringify({ version: out.version }), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });
