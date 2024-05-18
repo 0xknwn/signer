@@ -3,9 +3,6 @@
 // Should run on edge runtime
 export const edge = true;
 
-// Always add those header to this endpoint
-export const headers = {};
-
 // Stream the response
 export const streaming = true;
 
