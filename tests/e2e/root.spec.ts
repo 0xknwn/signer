@@ -6,12 +6,12 @@ test("has title", async ({ page }) => {
   // Expect a title "to contain" a substring.
   await expect(page).toHaveTitle("signer");
 
-  await page.getByRole("link", { name: "login" }).click();
-  await expect(page).toHaveURL(/\/login$/);
+  await page.getByRole("link", { name: "signin" }).click();
+  await expect(page).toHaveURL(/\/signin$/);
 
   await page.goBack();
-  await page.getByRole("link", { name: "register" }).click();
-  await expect(page).toHaveURL(/\/register$/);
+  await page.getByRole("link", { name: "signup" }).click();
+  await expect(page).toHaveURL(/\/signup$/);
 
   await page.goBack();
 });
