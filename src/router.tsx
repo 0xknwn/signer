@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider, Routes } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Root } from "./routes/root.tsx";
 import { ErrorPage } from "./error-page.tsx";
 import { Signin } from "./routes/signin.tsx";
