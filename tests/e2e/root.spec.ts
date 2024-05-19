@@ -7,7 +7,7 @@ test("has title", async ({ page }) => {
   await expect(page).toHaveTitle("signer");
 
   await page.getByRole("link", { name: "signin" }).click();
-  await expect(page).toHaveURL(/\/login$/);
+  await expect(page).toHaveURL(/\/signin$/);
 
   await page.goBack();
   await page.getByRole("link", { name: "signup" }).click();
