@@ -18,4 +18,17 @@ describe("navigate from the / page", () => {
     await user.click(signinLink);
     expect(signin).toHaveBeenCalledTimes(1);
   });
+
+  it("navigates from the root page to /signup", async () => {
+    render(<Root />, { wrapper: BrowserRouter });
+
+    expect(screen.getByText("signup")).toBeInTheDocument();
+
+    const user = userEvent.setup();
+    const signup = vi.spyOn(user, "click");
+    const signupLink = screen.getByText(/signup/i);
+
+    await user.click(signupLink);
+    expect(signup).toHaveBeenCalledTimes(1);
+  });
 });
