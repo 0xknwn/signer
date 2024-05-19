@@ -1,20 +1,13 @@
 import { expect, describe, it } from "vitest";
 
-describe("connection management", () => {
-  it("check 1+1", async () => {
-    expect(1 + 1).toBe(2);
+describe("connect management", () => {
+  describe(`it should be able to receive a connection request`, {}, () => {
+    it.todo(`should be possible to enter a 6 digit key and acknowlege a dapp`);
+
+    it.todo(`disconnect from a dapp`);
+
+    it.todo(`disconnect from all dapps`);
+
+    it.todo(`receive a transaction request from a dapp`);
   });
 });
-
-//     it.sequential.todo("lock a session", async () => {
-//       // Should forget the access token
-//     });
-
-//     it.sequential.todo("forget the private key #0", async () => {
-//       // Should be able to forget the private key #0
-//     });
-
-//     it.sequential.todo("forget the private key #1", async () => {
-//       // Should be able to forget the private key #1
-//     });
-//   });

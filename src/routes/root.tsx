@@ -5,10 +5,10 @@ export const Root = () => {
       <nav>
         <ul>
           <li>
-            <a href={`/login`}>login</a>
+            <a href={`/signin`}>signin</a>
           </li>
           <li>
-            <a href={`/register`}>register</a>
+            <a href={`/signup`}>signup</a>
           </li>
         </ul>
       </nav>
