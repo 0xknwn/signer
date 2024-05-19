@@ -3,8 +3,14 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 export const Signin = () => {
+  let navigate = useNavigate();
+
+  const clickHandler = () => {
+    navigate("/verify", { state: { key: "value" } });
+  };
   return (
     <>
+      <Link to="/">back</Link>
       <h1>Signin: /signin</h1>
       <form>
         <label>
@@ -16,10 +22,7 @@ export const Signin = () => {
           Password:
           <input type="password" />
         </label>
-
-        <Link to="/verify" state={{ key: "value" }}>
-          submit
-        </Link>
+        <input type="button" onClick={clickHandler} value="submit" />
       </form>
     </>
   );

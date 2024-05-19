@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 export const Verify = () => {
   let { state } = useLocation();
@@ -11,6 +11,7 @@ export const Verify = () => {
 
   return (
     <>
+      <Link to="/">back</Link>
       <h1>Verify: /verify</h1>
       <form>
         <label>
