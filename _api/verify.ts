@@ -1,4 +1,4 @@
-// file: _api/version.ts
+// file: _api/verify.ts
 
 // Should run on edge runtime
 export const edge = true;

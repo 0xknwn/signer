@@ -6,27 +6,26 @@ export const Verify = () => {
   const [status, setStatus] = useState(0);
 
   const handleClick = async () => {
-    setStatus(200);
-    // const res = await fetch("/api/verify", {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     email: "a@b.c",
-    //     verification_key: "123",
-    //   }),
-    // });
-    // if (res.status === 200) {
-    //   console.log("Success");
-    //   setStatus(200);
-    // } else if (res.status === 401) {
-    //   console.log("Unauthorized");
-    //   setStatus(401);
-    // } else {
-    //   console.log("Bad Request");
-    //   setStatus(400);
-    // }
+    const res = await fetch("/api/verify", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({
+        email: "a@b.c",
+        verification_key: "123",
+      }),
+    });
+    if (res.status === 200) {
+      console.log("Success");
+      setStatus(200);
+    } else if (res.status === 401) {
+      console.log("Unauthorized");
+      setStatus(401);
+    } else {
+      console.log("Bad Request");
+      setStatus(400);
+    }
   };
 
   useEffect(() => {
