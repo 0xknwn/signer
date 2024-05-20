@@ -33,6 +33,7 @@
     "jsdom": "^24.0.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
+    "msw": "^2.3.0",
     "react-router-dom": "^6.23.1",
     "sort-by": "^1.2.0",
     "typescript": "^5.2.2",
