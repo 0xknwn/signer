@@ -1,4 +1,4 @@
-import { expect, describe, it } from "vitest";
+import { describe, it } from "vitest";
 
 describe(`settings management`, {}, () => {
   describe(`you did not verify your BIP-39`, {}, () => {
