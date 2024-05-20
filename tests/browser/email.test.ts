@@ -1,7 +1,7 @@
 import { expect, describe, it } from "vitest";
 
+// Note: this is done by the backend-service
 describe(`email management`, {}, () => {
-  // Note: this is done by the backend-service
   it.todo(`depending on the status for the user it could`);
 
   it.todo(`notify the with the email code`);
