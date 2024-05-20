@@ -9,7 +9,7 @@ export const Signin = () => {
   };
   return (
     <>
-      <Link to="/">back</Link>
+      <Link to="/">back</Link>, no account? <Link to="/signup">signup</Link>
       <h1>Signin: /signin</h1>
       <form>
         <label>

@@ -5,6 +5,7 @@ import { Root } from "../../src/routes/root.tsx";
 import "@testing-library/jest-dom/vitest";
 import userEvent from "@testing-library/user-event";
 
+
 describe("navigate from the / page", () => {
   it("navigates from the root page to /signin", async () => {
     render(<Root />, { wrapper: BrowserRouter });

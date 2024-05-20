@@ -1,5 +1,6 @@
 import { expect, describe, it } from "vitest";
 
+// Note: this is done via the backend-service
 describe("connect management", () => {
   describe(`it should be able to receive a connection request`, {}, () => {
     it.todo(`should be possible to enter a 6 digit key and acknowlege a dapp`);
