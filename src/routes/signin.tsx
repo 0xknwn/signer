@@ -1,12 +1,18 @@
 import { Link } from "react-router-dom";
+
+import { useContext } from "react";
+import { Authn } from "../context/authn.tsx";
 import { useNavigate } from "react-router-dom";
 
 export const Signin = () => {
-  let navigate = useNavigate();
+  const { credentials, setCredentials } = useContext(Authn);
+  const navigate = useNavigate();
 
-  const clickHandler = () => {
-    navigate("/verify", { state: { key: "value" } });
+  const handleClick = () => {
+    setCredentials({ ...credentials, email: "a@b.c", derivedKey0: "123" });
+    navigate("/", { replace: true });
   };
+
   return (
     <>
       <Link to="/">back</Link>, no account? <Link to="/signup">signup</Link>
@@ -14,14 +20,18 @@ export const Signin = () => {
       <form>
         <label>
           Email:
-          <input type="email" />
+          <input type="email" autoComplete="username" name="username" />
         </label>
 
         <label>
           Password:
-          <input type="password" />
+          <input
+            type="password"
+            autoComplete="current-password"
+            name="password"
+          />
         </label>
-        <input type="button" onClick={clickHandler} value="submit" />
+        <input type="button" onClick={handleClick} value="submit" />
       </form>
     </>
   );
