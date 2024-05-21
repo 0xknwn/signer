@@ -1,8 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
-
-type Props = {
-  children: ReactNode;
-};
+import { createContext } from "react";
 
 export type AccessToken = {
   key: string | null;
