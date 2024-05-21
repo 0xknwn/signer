@@ -1,8 +1,14 @@
-import { useEffect, useState } from "react";
-import { Navigate, useLocation, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
+import { useContext } from "react";
+import { Authn } from "../context/authn.tsx";
+import { useNavigate } from "react-router-dom";
 
 export const Verify = () => {
-  let { state } = useLocation();
+  const { credentials, setCredentials } = useContext(Authn);
+  const navigate = useNavigate();
+
   const [status, setStatus] = useState(0);
 
   const handleClick = async () => {
@@ -29,37 +35,41 @@ export const Verify = () => {
   };
 
   useEffect(() => {
-    if (status === 200 || status === 0) {
+    if (status === 0) {
       return;
     }
+    if (status === 200) {
+      setCredentials({
+        ...credentials,
+        accessToken: { key: "1", expiresAt: Date.now() + 3600 },
+      });
+      navigate("/", { replace: true });
+      return;
+    }
+    setCredentials({
+      ...credentials,
+      derivedKey0: null,
+    });
     console.log("Verify has somehow failed.");
   }, [status]);
 
   return (
     <>
-      {status === 200 ? (
-        <Navigate replace to={"/accounts"} />
-      ) : state && state.key ? (
-        <>
-          <Link to="/">back</Link>
-          <h1>Verify: /verify</h1>
-          <form>
-            <label>
-              Verification Code :
-              <input type="text" />
-            </label>
-            <input
-              type="button"
-              onClick={handleClick}
-              name="verify"
-              value="verify"
-            />
-            <div hidden>{status}</div>
-          </form>
-        </>
-      ) : (
-        <Navigate replace to={"/signin"} />
-      )}
+      <Link to="/">back</Link>
+      <h1>Verify: /verify</h1>
+      <form>
+        <label>
+          Verification Code :
+          <input type="text" />
+        </label>
+        <input
+          type="button"
+          onClick={handleClick}
+          name="verify"
+          value="verify"
+        />
+        <div hidden>{status}</div>
+      </form>
     </>
   );
 };
