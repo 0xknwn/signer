@@ -1,6 +1,12 @@
 
+# Signup
 
-/signup collect data and generates an entry in the database that is indexed
+The signup process requires you provide some data that you will use to access
+your account. 
+used by your account. In the process, we act as a helper to manage an account
+and we do **NOT** store any data 
+
+collect data and generates an entry in the database that is indexed
 by the public key #0 of the user. It contains the email, is_verified, color
 and a nickname. It contains: (1) the cyphered data and (2) accounts
 
