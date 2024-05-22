@@ -1,20 +1,40 @@
-import { expect, describe, it, vi } from "vitest";
+import {
+  expect,
+  describe,
+  it,
+  vi,
+  afterAll,
+  afterEach,
+  beforeAll,
+} from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
-import { Routes } from "./routes.tsx";
 import "@testing-library/jest-dom/vitest";
 import userEvent from "@testing-library/user-event";
 
-import { afterAll, afterEach, beforeAll } from "vitest";
-import { setupServer } from "msw/node";
 import { HttpResponse, http } from "msw";
-import { Authn, type Credentials, AccessToken } from "../context/authn.tsx";
+import { setupServer } from "msw/node";
 
-export const restHandlers = [
-  http.post("/api/verify", () => {
-    return HttpResponse.json({ key: "value" });
-  }),
-];
+import { AppRouter } from "./approuter.tsx";
+import { VerifyRequest } from "./verify.tsx";
+import { AccessToken } from "../context/authn.tsx";
+
+const verifyHandler = http.post("/api/verify", async ({ request }) => {
+  const payload = await request.json();
+  if (payload === null || typeof payload !== "object") {
+    return HttpResponse.json("", { status: 400 });
+  }
+  const req = new VerifyRequest(payload);
+  if (!req.isValid()) {
+    return HttpResponse.json("", { status: 400 });
+  }
+  if (req.email === "a@b.c" && req.verification_key === "123") {
+    return HttpResponse.json({ key: "valid" });
+  }
+  return HttpResponse.json("", { status: 401 });
+});
+
+export const restHandlers = [verifyHandler];
 
 const server = setupServer(...restHandlers);
 
@@ -48,52 +68,44 @@ describe("check the email code", () => {
 
   // Reset handlers after each test `important for test isolation`
   afterEach(() => server.resetHandlers());
-  it("navigates to /verify without a state and get back to /signin", async () => {
-    const initialCredentials = {
-      accessToken: null as AccessToken | null,
-      derivedKey0: null as string | null,
-      email: null,
-      managedAccounts: null,
-    };
-
+  it("navigates to /signin without proper state", async () => {
     render(
       <MemoryRouter initialEntries={[{ pathname: "/verify" }]}>
-        <Authn.Provider
-          value={{
-            credentials: initialCredentials,
-            setCredentials: (v: Credentials) => {
-              initialCredentials.accessToken = v.accessToken || null;
-            },
-          }}
-        >
-          <Routes />
-        </Authn.Provider>
+        <AppRouter />
       </MemoryRouter>
     );
 
     expect(screen.getByText("Signin: /signin")).toBeInTheDocument();
   });
 
-  it("navigates to /verify with a state and succeed in verification", async () => {
+  it("sticks to /verify with proper state", async () => {
     const initialCredentials = {
       accessToken: null as AccessToken | null,
-      derivedKey0: "123" as string | null,
-      email: null,
+      derivedKey0: "key" as string | null,
+      email: "a@b.c" as string | null,
       managedAccounts: null,
     };
 
     render(
       <MemoryRouter initialEntries={[{ pathname: "/verify" }]}>
-        <Authn.Provider
-          value={{
-            credentials: initialCredentials,
-            setCredentials: (v: Credentials) => {
-              initialCredentials.accessToken = v.accessToken || null;
-            },
-          }}
-        >
-          <Routes />
-        </Authn.Provider>
+        <AppRouter mockCredentials={initialCredentials} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText("Verify: /verify")).toBeInTheDocument();
+  });
+
+  it("navigates to /onboard with proper state and right verification code", async () => {
+    let initialCredentials = {
+      accessToken: null as AccessToken | null,
+      derivedKey0: "123" as string | null,
+      email: "a@b.c" as string | null,
+      managedAccounts: null,
+    };
+
+    render(
+      <MemoryRouter initialEntries={[{ pathname: "/verify" }]}>
+        <AppRouter mockCredentials={initialCredentials} />
       </MemoryRouter>
     );
 
@@ -103,6 +115,13 @@ describe("check the email code", () => {
     const signin = vi.spyOn(user, "click");
 
     const verifyButton = screen.getByText("verify");
+    const label = screen.getByLabelText("Verification Code :");
+    const verifyCode = label.closest("input");
+    expect(verifyCode).toBeInTheDocument();
+    if (verifyCode === null) {
+      throw new Error("No input found");
+    }
+    await user.type(verifyCode, "123");
     await user.click(verifyButton);
     expect(signin).toHaveBeenCalledTimes(1);
 
