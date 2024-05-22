@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import {
   Navigate,
   Routes as Router,
@@ -7,7 +7,6 @@ import {
   useLocation,
 } from "react-router-dom";
 import { Authn } from "../context/authn.tsx";
-// import { Home } from "./home";
 import { ErrorPage } from "../error-page.tsx";
 
 import { Accounts } from "./accounts.tsx";
@@ -19,19 +18,30 @@ import { Onboard } from "./onboard.tsx";
 const PrivateRoutes = () => {
   const location = useLocation();
   const { credentials } = useContext(Authn);
-  // @todo: if you have what is required and are on /onboard or /verify, go to /
-  return (credentials?.accessToken?.key &&
+
+  useEffect(() => {
+    console.log("privateRoute: credentials have changed");
+  }, [credentials]);
+
+  return credentials?.accessToken?.key &&
     credentials.accessToken.expiresAt &&
     credentials.accessToken.expiresAt > Date.now() &&
-    (credentials.managedAccounts || location.pathname === "/onboard")) ||
-    (credentials?.derivedKey0 && location.pathname === "/verify") ? (
-    <Outlet />
+    credentials.managedAccounts &&
+    (location.pathname === "/onboard" || location.pathname === "/verify") ? (
+    <Navigate to="/" replace />
   ) : credentials?.accessToken?.key &&
     credentials.accessToken.expiresAt &&
     credentials.accessToken.expiresAt > Date.now() &&
-    !credentials.managedAccounts ? (
+    !credentials.managedAccounts &&
+    location.pathname === "/verify" ? (
     <Navigate to="/onboard" replace />
-  ) : credentials?.derivedKey0 ? (
+  ) : (credentials?.accessToken?.key &&
+      credentials.accessToken.expiresAt &&
+      credentials.accessToken.expiresAt > Date.now() &&
+      (credentials.managedAccounts || location.pathname === "/onboard")) ||
+    (credentials?.derivedKey0 && location.pathname === "/verify") ? (
+    <Outlet />
+  ) : credentials?.derivedKey0 && credentials.email ? (
     <Navigate to="/verify" replace />
   ) : (
     <Navigate to="/signin" replace />

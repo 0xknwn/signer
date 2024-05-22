@@ -1,22 +1,30 @@
-import { BrowserRouter } from "react-router-dom";
 import { Routes } from "./routes/routes";
 import { Authn, type Credentials, type AccessToken } from "./context/authn.tsx";
 import { useState } from "react";
 
-const initialCredentials = {
+const emptyCredentials = {
   accessToken: null as AccessToken | null,
   derivedKey0: null as string | null,
   email: null as string | null,
 } as Credentials;
 
-export const App = () => {
-  const [credentials, setCredentials] = useState(initialCredentials);
-
+const App = ({
+  mockCredentials = false,
+}: {
+  mockCredentials: false | Credentials;
+}) => {
+  const [credentials, setCredentials] = useState(
+    mockCredentials ? mockCredentials : emptyCredentials
+  );
   return (
-    <BrowserRouter>
-      <Authn.Provider value={{ credentials, setCredentials }}>
-        <Routes />
-      </Authn.Provider>
-    </BrowserRouter>
+    <Authn.Provider value={{ credentials, setCredentials }}>
+      <Routes />
+    </Authn.Provider>
   );
 };
+
+App.defaultProps = {
+  mockCredentials: false,
+};
+
+export { App };

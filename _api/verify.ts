@@ -27,7 +27,7 @@ export default async function handler(request: Request) {
   }
   const { email, verification_key } = output;
   if (email === "a@b.c" && verification_key === "123") {
-    return new Response(`{"message": "Success"}`, {
+    return new Response(`{"key": "valid"}`, {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
