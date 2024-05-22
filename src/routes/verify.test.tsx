@@ -15,7 +15,7 @@ import userEvent from "@testing-library/user-event";
 import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
 
-import { App } from "../app.tsx";
+import { AppRouter } from "./approuter.tsx";
 import { VerifyRequest } from "./verify.tsx";
 import { AccessToken } from "../context/authn.tsx";
 
@@ -71,7 +71,7 @@ describe("check the email code", () => {
   it("navigates to /signin without proper state", async () => {
     render(
       <MemoryRouter initialEntries={[{ pathname: "/verify" }]}>
-        <App />
+        <AppRouter />
       </MemoryRouter>
     );
 
@@ -88,7 +88,7 @@ describe("check the email code", () => {
 
     render(
       <MemoryRouter initialEntries={[{ pathname: "/verify" }]}>
-        <App mockCredentials={initialCredentials} />
+        <AppRouter mockCredentials={initialCredentials} />
       </MemoryRouter>
     );
 
@@ -105,7 +105,7 @@ describe("check the email code", () => {
 
     render(
       <MemoryRouter initialEntries={[{ pathname: "/verify" }]}>
-        <App mockCredentials={initialCredentials} />
+        <AppRouter mockCredentials={initialCredentials} />
       </MemoryRouter>
     );
 

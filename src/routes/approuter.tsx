@@ -1,12 +1,10 @@
-import { useContext, useEffect } from "react";
+import { useContext, useState } from "react";
+import { Navigate, Routes, Route, Outlet, useLocation } from "react-router-dom";
 import {
-  Navigate,
-  Routes as Router,
-  Route,
-  Outlet,
-  useLocation,
-} from "react-router-dom";
-import { Authn } from "../context/authn.tsx";
+  Authn,
+  type Credentials,
+  type AccessToken,
+} from "../context/authn.tsx";
 import { ErrorPage } from "../error-page.tsx";
 
 import { Accounts } from "./accounts.tsx";
@@ -18,10 +16,6 @@ import { Onboard } from "./onboard.tsx";
 const PrivateRoutes = () => {
   const location = useLocation();
   const { credentials } = useContext(Authn);
-
-  useEffect(() => {
-    console.log("privateRoute: credentials have changed");
-  }, [credentials]);
 
   return credentials?.accessToken?.key &&
     credentials.accessToken.expiresAt &&
@@ -48,16 +42,38 @@ const PrivateRoutes = () => {
   );
 };
 
-export const Routes = () => {
+const emptyCredentials = {
+  accessToken: null as AccessToken | null,
+  derivedKey0: null as string | null,
+  email: null as string | null,
+} as Credentials;
+
+const AppRouter = ({
+  mockCredentials = false,
+}: {
+  mockCredentials: false | Credentials;
+}) => {
+  const [credentials, setCredentials] = useState(
+    mockCredentials ? mockCredentials : emptyCredentials
+  );
+
   return (
-    <Router>
-      <Route element={<PrivateRoutes />} errorElement={<ErrorPage />}>
-        <Route path="/" element={<Accounts />} />
-        <Route path="/verify" element={<Verify />} />
-        <Route path="/onboard" element={<Onboard />} />
-      </Route>
-      <Route path="/signin" element={<Signin />} />
-      <Route path="/signup" element={<Signup />} />
-    </Router>
+    <Authn.Provider value={{ credentials, setCredentials }}>
+      <Routes>
+        <Route element={<PrivateRoutes />} errorElement={<ErrorPage />}>
+          <Route path="/" element={<Accounts />} />
+          <Route path="/verify" element={<Verify />} />
+          <Route path="/onboard" element={<Onboard />} />
+        </Route>
+        <Route path="/signin" element={<Signin />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
+    </Authn.Provider>
   );
 };
+
+AppRouter.defaultProps = {
+  mockCredentials: false,
+};
+
+export { AppRouter };
