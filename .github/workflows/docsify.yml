@@ -6,6 +6,12 @@ on:
   pull_request:
     branches: [ develop ]
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   bump:
     runs-on: ubuntu-latest
@@ -13,5 +19,5 @@ jobs:
     - uses: actions/checkout@master
     - uses: tool3/docsify-action@master
       with:
-        github_token: ${{ secrets.GP_TOKEN }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: develop
