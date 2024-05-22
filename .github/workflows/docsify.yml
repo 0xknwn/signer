@@ -8,9 +8,19 @@ on:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  # contents: read
+  # pages: write
+  # id-token: write
+  actions: write
+  checks: write
+  contents: write
+  deployments: write
+  issues: write
+  packages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: write
+  statuses: write
 
 jobs:
   bump:
@@ -19,5 +29,5 @@ jobs:
     - uses: actions/checkout@master
     - uses: tool3/docsify-action@master
       with:
-        # github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: develop
