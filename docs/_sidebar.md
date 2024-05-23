@@ -1,13 +1,11 @@
-* Getting started
+- [README](README.md)
 
-  * [Quick start]()
+- Authn
+  - [Hacked](authn/hacked.md)
+  - [Hackers](authn/hackers.md)
+  - [Key Management](authn/key-management.md)
+  - [Signin](authn/signin.md)
+  - [Signup](authn/signup.md)
 
-* Security
-  * [Authentication](authn.md)
-    * [signup](./authn/signup.md)
-    * [key management](./authn/key-management.md)
-    * [signin](./authn/signin.md)
-    * [hacked](./authn/hacked.md)
-
-* Privacy
-  * [Policies](privacy.md)
+- [Authn](authn.md)
+- [Privacy](privacy.md)
