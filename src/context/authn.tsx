@@ -12,14 +12,16 @@ export type ManagedAccount = {
 
 export type Credentials = {
   accessToken: AccessToken | null | undefined;
-  derivedKey0: string | null;
+  signer: CryptoKey | null;
+  encrypter: CryptoKey | null;
   managedAccounts: ManagedAccount[] | null;
   email: string | null;
 };
 
 const initialCredentials = {
   accessToken: null as AccessToken | null,
-  derivedKey0: null as string | null,
+  signer: null as CryptoKey | null,
+  encrypter: null as CryptoKey | null,
   email: null as string | null,
 } as Credentials;
 

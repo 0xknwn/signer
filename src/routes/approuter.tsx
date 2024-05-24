@@ -33,9 +33,9 @@ const PrivateRoutes = () => {
       credentials.accessToken.expiresAt &&
       credentials.accessToken.expiresAt > Date.now() &&
       (credentials.managedAccounts || location.pathname === "/onboard")) ||
-    (credentials?.derivedKey0 && location.pathname === "/verify") ? (
+    (credentials?.signer && location.pathname === "/verify") ? (
     <Outlet />
-  ) : credentials?.derivedKey0 && credentials.email ? (
+  ) : credentials?.signer && credentials.email ? (
     <Navigate to="/verify" replace />
   ) : (
     <Navigate to="/signin" replace />
@@ -44,7 +44,8 @@ const PrivateRoutes = () => {
 
 const emptyCredentials = {
   accessToken: null as AccessToken | null,
-  derivedKey0: null as string | null,
+  signer: null as string | null,
+  encrypter: null as string | null,
   email: null as string | null,
 } as Credentials;
 

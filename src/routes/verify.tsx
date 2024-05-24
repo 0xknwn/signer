@@ -32,7 +32,8 @@ const Text = ({ children }: Props) => {
   const reset = () => {
     setCredentials({
       accessToken: null,
-      derivedKey0: null,
+      signer: null,
+      encrypter: null,
       email: null,
       managedAccounts: null,
     });
@@ -121,7 +122,8 @@ export const Verify = () => {
     setCredentials({
       ...credentials,
       email: null,
-      derivedKey0: null,
+      signer: null,
+      encrypter: null,
     });
   }, [status, credentials]);
 
