@@ -11,6 +11,7 @@ import { MemoryRouter } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import userEvent from "@testing-library/user-event";
+import { derive } from "../helpers/encryption";
 
 import { HttpResponse, http } from "msw";
 import { setupServer } from "msw/node";
@@ -38,7 +39,6 @@ export const restHandlers = [verifyHandler];
 
 const server = setupServer(...restHandlers);
 
-
 describe("manage the email verification", () => {
   // Start server before all tests
   beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
@@ -59,9 +59,11 @@ describe("manage the email verification", () => {
   });
 
   it("sticks to /verify with proper state", async () => {
+    const { signer, encrypter } = await derive("a@b.c", "123");
     const initialCredentials = {
       accessToken: null as AccessToken | null,
-      derivedKey0: "key" as string | null,
+      signer,
+      encrypter,
       email: "a@b.c" as string | null,
       managedAccounts: null,
     };
@@ -76,9 +78,11 @@ describe("manage the email verification", () => {
   });
 
   it("navigates to /onboard when sending the right verification code", async () => {
+    const { signer, encrypter } = await derive("a@b.c", "123");
     let initialCredentials = {
       accessToken: null as AccessToken | null,
-      derivedKey0: "123" as string | null,
+      signer,
+      encrypter,
       email: "a@b.c" as string | null,
       managedAccounts: null,
     };
@@ -110,9 +114,11 @@ describe("manage the email verification", () => {
   });
 
   it("navigates back to /signin with the wrong verification code", async () => {
+    const { signer, encrypter } = await derive("a@b.c", "123");
     let initialCredentials = {
       accessToken: null as AccessToken | null,
-      derivedKey0: "123" as string | null,
+      signer,
+      encrypter,
       email: "a@b.c" as string | null,
       managedAccounts: null,
     };
