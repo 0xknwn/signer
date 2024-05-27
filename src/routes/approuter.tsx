@@ -52,7 +52,7 @@ const emptyCredentials = {
 const AppRouter = ({
   mockCredentials = false,
 }: {
-  mockCredentials: false | Credentials;
+  mockCredentials?: false | Credentials;
 }) => {
   const [credentials, setCredentials] = useState(
     mockCredentials ? mockCredentials : emptyCredentials
@@ -71,10 +71,6 @@ const AppRouter = ({
       </Routes>
     </Authn.Provider>
   );
-};
-
-AppRouter.defaultProps = {
-  mockCredentials: false,
 };
 
 export { AppRouter };
