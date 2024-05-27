@@ -10,7 +10,7 @@ export const mockVerify = async (
     return {
       status: 200,
       key: "valid",
-      expiresAt: Date.now() + 120,
+      expiresAt: Date.now() + 120000,
     };
   }
   return { status: 401 };

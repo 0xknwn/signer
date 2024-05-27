@@ -12,11 +12,11 @@ export type ManagedAccounts = {
 };
 
 export type Credentials = {
-  accessToken: AccessToken | null | undefined;
-  signer: CryptoKey | null;
-  encrypter: CryptoKey | null;
+  accessToken?: AccessToken | null;
+  signer?: CryptoKey;
+  encrypter?: CryptoKey;
   managedAccounts?: ManagedAccounts;
-  email: string | null;
+  email?: string;
 };
 
 const initialCredentials = {

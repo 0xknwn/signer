@@ -42,7 +42,7 @@ const apiVerify = async (
   return {
     status: res.status,
     key,
-    expiresAt: Date.now() + 120,
+    expiresAt: Date.now() + 120000,
     managedAccounts,
   };
 };

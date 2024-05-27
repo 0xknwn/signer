@@ -64,7 +64,7 @@ describe("manage the email verification", () => {
       accessToken: null as AccessToken | null,
       signer,
       encrypter,
-      email: "a@b.c" as string | null,
+      email: "a@b.c",
     };
 
     render(
@@ -82,7 +82,7 @@ describe("manage the email verification", () => {
       accessToken: null as AccessToken | null,
       signer,
       encrypter,
-      email: "a@b.c" as string | null,
+      email: "a@b.c",
     };
 
     render(
@@ -114,10 +114,9 @@ describe("manage the email verification", () => {
   it("navigates back to /signin with the wrong verification code", async () => {
     const { signer, encrypter } = await derive("a@b.c", "123");
     let initialCredentials = {
-      accessToken: null as AccessToken | null,
       signer,
       encrypter,
-      email: "a@b.c" as string | null,
+      email: "a@b.c",
     };
 
     render(

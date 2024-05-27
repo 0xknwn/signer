@@ -4,6 +4,7 @@ import * as bip39 from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
 import { encrypt } from "../helpers/encryption";
 import { saveOnboard } from "../requests/onboard.ts";
+import { Link } from "react-router-dom";
 
 export const Onboard = () => {
   const { credentials, setCredentials } = useContext(Authn);
@@ -21,7 +22,14 @@ export const Onboard = () => {
     setHiddenArea(true);
   };
 
+  const logout = () => {
+    setCredentials({});
+  };
+
   const submit = async () => {
+    if (!encrypter) {
+      throw new Error("no encrypter");
+    }
     if (selector === "register") {
       console.log("check the key exists and is valid");
       const isValidMnemonic = bip39.validateMnemonic(mnemonic, wordlist);
@@ -46,6 +54,9 @@ export const Onboard = () => {
 
   return (
     <>
+      <Link to="#" onClick={logout}>
+        Logout
+      </Link>
       <h1>Onboarding: /onboarding</h1>
       <p>Welcome to the onboarding page. You did not save the</p>
       <ul>
