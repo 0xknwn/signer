@@ -30,13 +30,7 @@ const Text = ({ children }: Props) => {
   const { setCredentials } = useContext(Authn);
 
   const reset = () => {
-    setCredentials({
-      accessToken: null,
-      signer: null,
-      encrypter: null,
-      email: null,
-      managedAccounts: null,
-    });
+    setCredentials({});
   };
 
   return (
@@ -99,6 +93,7 @@ export const Verify = () => {
       status: outputStatus,
       key,
       expiresAt,
+      managedAccounts,
     } = await verify(credentials.email || "", verifyCode);
     if (outputStatus === 200) {
       if (!key || !expiresAt) {
@@ -108,6 +103,7 @@ export const Verify = () => {
       setCredentials({
         ...credentials,
         accessToken: { key, expiresAt },
+        managedAccounts,
       });
       setStatus(200);
       return;
@@ -119,17 +115,18 @@ export const Verify = () => {
     if (status === 0 || status === 200) {
       return;
     }
-    setCredentials({
-      ...credentials,
-      email: null,
-      signer: null,
-      encrypter: null,
-    });
+    setCredentials({});
   }, [status, credentials]);
+
+  const logout = () => {
+    setCredentials({});
+  };
 
   return (
     <>
-      <Link to="/">back</Link>
+      <Link to="#" onClick={logout}>
+        Logout
+      </Link>
       <h1>Verify: /verify</h1>
       <Text>
         <form>

@@ -5,17 +5,18 @@ export type AccessToken = {
   expiresAt: number | null;
 };
 
-export type ManagedAccount = {
-  key: string | null;
-  expiresAt: number | null;
+export type ManagedAccounts = {
+  mainnet?: string[];
+  sepolia?: string[];
+  testnet?: string[];
 };
 
 export type Credentials = {
-  accessToken: AccessToken | null | undefined;
-  signer: CryptoKey | null;
-  encrypter: CryptoKey | null;
-  managedAccounts: ManagedAccount[] | null;
-  email: string | null;
+  accessToken?: AccessToken | null;
+  signer?: CryptoKey;
+  encrypter?: CryptoKey;
+  managedAccounts?: ManagedAccounts;
+  email?: string;
 };
 
 const initialCredentials = {

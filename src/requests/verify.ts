@@ -1,6 +1,20 @@
 import { mockVerify } from "./mocks";
 
-const apiVerify = async (email: string | null, code: string) => {
+export type VerifyOutput = {
+  status: number;
+  key?: string;
+  expiresAt?: number;
+  managedAccounts?: {
+    mainnet: string[];
+    sepolia: string[];
+    testnet: string[];
+  };
+};
+
+const apiVerify = async (
+  email: string | null,
+  code: string
+): Promise<VerifyOutput> => {
   if (email === null) {
     return { status: 401 };
   }
@@ -17,8 +31,20 @@ const apiVerify = async (email: string | null, code: string) => {
   if (res.status !== 200) {
     return { status: res.status };
   }
-  const { key } = (await res.json()) as { key: string };
-  return { status: res.status, key, expiresAt: Date.now() + 120 };
+  const { key, managedAccounts } = (await res.json()) as {
+    key: string;
+    managedAccounts?: {
+      mainnet: string[];
+      sepolia: string[];
+      testnet: string[];
+    };
+  };
+  return {
+    status: res.status,
+    key,
+    expiresAt: Date.now() + 120000,
+    managedAccounts,
+  };
 };
 
 export const verify =

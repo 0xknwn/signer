@@ -1,10 +1,6 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Navigate, Routes, Route, Outlet, useLocation } from "react-router-dom";
-import {
-  Authn,
-  type Credentials,
-  type AccessToken,
-} from "../context/authn.tsx";
+import { Authn, type Credentials } from "../context/authn.tsx";
 import { ErrorPage } from "../error-page.tsx";
 
 import { Accounts } from "./accounts.tsx";
@@ -15,7 +11,16 @@ import { Onboard } from "./onboard.tsx";
 
 const PrivateRoutes = () => {
   const location = useLocation();
-  const { credentials } = useContext(Authn);
+  const { credentials, setCredentials } = useContext(Authn);
+
+  useEffect(() => {
+    if (
+      credentials.accessToken?.expiresAt &&
+      credentials.accessToken.expiresAt < Date.now()
+    ) {
+      setCredentials({});
+    }
+  }, [credentials]);
 
   return credentials?.accessToken?.key &&
     credentials.accessToken.expiresAt &&
@@ -23,6 +28,13 @@ const PrivateRoutes = () => {
     credentials.managedAccounts &&
     (location.pathname === "/onboard" || location.pathname === "/verify") ? (
     <Navigate to="/" replace />
+  ) : credentials?.accessToken?.key &&
+    credentials.accessToken.expiresAt &&
+    credentials.accessToken.expiresAt > Date.now() &&
+    credentials.managedAccounts &&
+    location.pathname !== "/onboard" &&
+    location.pathname !== "/verify" ? (
+    <Outlet />
   ) : credentials?.accessToken?.key &&
     credentials.accessToken.expiresAt &&
     credentials.accessToken.expiresAt > Date.now() &&
@@ -42,12 +54,7 @@ const PrivateRoutes = () => {
   );
 };
 
-const emptyCredentials = {
-  accessToken: null as AccessToken | null,
-  signer: null as string | null,
-  encrypter: null as string | null,
-  email: null as string | null,
-} as Credentials;
+const emptyCredentials = {} as Credentials;
 
 const AppRouter = ({
   mockCredentials = false,

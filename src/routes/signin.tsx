@@ -17,7 +17,7 @@ export const Signin = () => {
 
   return (
     <>
-      <Link to="/">back</Link>, no account? <Link to="/signup">signup</Link>
+      No account yet? <Link to="/signup">signup</Link>
       <h1>Signin: /signin</h1>
       <form>
         <label>
