@@ -35,7 +35,6 @@ const Text = ({ children }: Props) => {
       signer: null,
       encrypter: null,
       email: null,
-      managedAccounts: null,
     });
   };
 
@@ -99,6 +98,7 @@ export const Verify = () => {
       status: outputStatus,
       key,
       expiresAt,
+      managedAccounts,
     } = await verify(credentials.email || "", verifyCode);
     if (outputStatus === 200) {
       if (!key || !expiresAt) {
@@ -108,6 +108,7 @@ export const Verify = () => {
       setCredentials({
         ...credentials,
         accessToken: { key, expiresAt },
+        managedAccounts,
       });
       setStatus(200);
       return;

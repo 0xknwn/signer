@@ -65,7 +65,6 @@ describe("manage the email verification", () => {
       signer,
       encrypter,
       email: "a@b.c" as string | null,
-      managedAccounts: null,
     };
 
     render(
@@ -84,7 +83,6 @@ describe("manage the email verification", () => {
       signer,
       encrypter,
       email: "a@b.c" as string | null,
-      managedAccounts: null,
     };
 
     render(
@@ -120,7 +118,6 @@ describe("manage the email verification", () => {
       signer,
       encrypter,
       email: "a@b.c" as string | null,
-      managedAccounts: null,
     };
 
     render(
