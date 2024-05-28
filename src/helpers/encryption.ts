@@ -1,5 +1,12 @@
 import { Buffer } from "buffer";
 
+import { mnemonicToSeedSync } from "@scure/bip39";
+import { HDKey } from "@scure/bip32";
+import { getStarkKey, grindKey } from "micro-starknet";
+import { encode } from "starknet";
+
+export const STANDARD_DERIVATION_PATH = "m/44'/9004'/0'/0";
+
 export const derive = async (email: string, password: string) => {
   let rely_party = window.location.hostname;
   if (!rely_party || rely_party === "") {
@@ -79,4 +86,24 @@ export const decrypt = async (decrypter: CryptoKey | null, data: string) => {
     encryptedData
   );
   return new TextDecoder().decode(decryptedData);
+};
+
+export const getKeys = (mnemonic: string, index: number = 0) => {
+  const seed = mnemonicToSeedSync(mnemonic.trim());
+  const hdnodewallet = HDKey.fromMasterSeed(seed).derive(
+    `${STANDARD_DERIVATION_PATH}/${index}`
+  );
+  const preGrindPrivateKey = hdnodewallet.privateKey;
+
+  if (!preGrindPrivateKey) {
+    throw new Error("Could not generate private key");
+  }
+  const grindPrivateKey = grindKey(preGrindPrivateKey);
+  const privateKey = encode.sanitizeHex(
+    encode.sanitizeBytes(grindPrivateKey, 2)
+  );
+  return {
+    publicKey: encode.sanitizeHex(getStarkKey(privateKey)),
+    privateKey,
+  };
 };
