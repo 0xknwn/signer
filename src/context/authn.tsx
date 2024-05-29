@@ -5,10 +5,15 @@ export type AccessToken = {
   expiresAt: number | null;
 };
 
+export type ManagedAccount = {
+  address?: string;
+  publicKey: string;
+};
+
 export type ManagedAccounts = {
-  mainnet?: string[];
-  sepolia?: string[];
-  testnet?: string[];
+  mainnet?: ManagedAccount[];
+  sepolia?: ManagedAccount[];
+  testnet?: ManagedAccount[];
 };
 
 export type Credentials = {

@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Authn } from "../context/authn.tsx";
 import * as bip39 from "@scure/bip39";
 import { wordlist } from "@scure/bip39/wordlists/english";
-import { encrypt } from "../helpers/encryption";
+import { encrypt, getKeys } from "../helpers/encryption";
 import { saveOnboard } from "../requests/onboard.ts";
 import { Link } from "react-router-dom";
 
@@ -27,25 +27,28 @@ export const Onboard = () => {
   };
 
   const submit = async () => {
-    if (!encrypter) {
-      throw new Error("no encrypter");
-    }
     if (selector === "register") {
-      console.log("check the key exists and is valid");
       const isValidMnemonic = bip39.validateMnemonic(mnemonic, wordlist);
       if (!isValidMnemonic) {
         throw new Error("invalid mnemonic");
       }
-    } else {
-      setMnemonic(bip39.generateMnemonic(wordlist));
     }
-    const encryptedData = await encrypt(encrypter, mnemonic);
+    let mn = mnemonic;
+    if (selector === "new") {
+      mn = bip39.generateMnemonic(wordlist);
+    }
+    if (!encrypter) {
+      throw new Error("no encrypter");
+    }
+    const encryptedData = await encrypt(encrypter, mn);
     if (!accessToken || !accessToken.key) {
       throw new Error("no access token");
     }
     const { key } = accessToken;
-    const { managedAccounts } = await saveOnboard(key, encryptedData);
-    console.log(managedAccounts);
+    const { publicKey } = getKeys(mn);
+    const { managedAccounts } = await saveOnboard(key, encryptedData, {
+      mainnet: [{ address: "0x0", publicKey: publicKey }],
+    });
     setCredentials({
       ...credentials,
       managedAccounts,

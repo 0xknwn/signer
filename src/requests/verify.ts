@@ -1,14 +1,11 @@
+import { ManagedAccounts } from "../context/authn";
 import { mockVerify } from "./mocks";
 
 export type VerifyOutput = {
   status: number;
   key?: string;
   expiresAt?: number;
-  managedAccounts?: {
-    mainnet: string[];
-    sepolia: string[];
-    testnet: string[];
-  };
+  managedAccounts?: ManagedAccounts;
 };
 
 const apiVerify = async (
@@ -33,11 +30,7 @@ const apiVerify = async (
   }
   const { key, managedAccounts } = (await res.json()) as {
     key: string;
-    managedAccounts?: {
-      mainnet: string[];
-      sepolia: string[];
-      testnet: string[];
-    };
+    managedAccounts?: ManagedAccounts;
   };
   return {
     status: res.status,

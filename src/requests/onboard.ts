@@ -8,7 +8,8 @@ export type SaveOnboardOutput = {
 
 const apiSaveOnboard = async (
   accessKey: string | null,
-  encryptedData: string
+  encryptedData: string,
+  managedAccounts: ManagedAccounts
 ): Promise<SaveOnboardOutput> => {
   if (!accessKey) {
     return { status: 401 };
@@ -21,10 +22,7 @@ const apiSaveOnboard = async (
     method: "POST",
     body: JSON.stringify({
       encryptedData,
-      managedAccounts: {
-        mainnet: [],
-        sepolia: [],
-      },
+      managedAccounts,
     }),
   });
 };
