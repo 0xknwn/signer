@@ -1,11 +1,5 @@
-import NavBar from "../components/navbar";
-import { useAuth } from "../helpers/authn";
-import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router";
-import Markdown from "markdown-to-jsx";
-import { useState } from "react";
+# Signin
 
-const content = `
 Signin to the extension is mandatory. Its creates an encryption key that can be
 used to secure a passphrase, aka a set of 12 words that matches the BIP39
 standard. The encryption/decryption key is generated from the PBKDF2 algorithm
@@ -74,48 +68,3 @@ be saved and the signer does not provide any way to recover it. In addition:
 A user cannot reset a passphrase. Instead he will have to reset the login and go
 back to the initial login page. To proceed, he has to logout and request the
 reset of the login on the login page.
-`;
-
-function Signin() {
-  const { onLogin } = useAuth();
-  const { token } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  useEffect(() => {
-    console.log("signin");
-    if (token) {
-      console.log(location.state);
-      const origin = location.state?.from?.pathname || "/dashboard";
-      navigate(origin);
-    }
-  }, []);
-
-  const [help, setHelp] = useState(false);
-
-  const activateLasers = () => {
-    setHelp(!help);
-  };
-
-  return (
-    <>
-      <NavBar />
-      <h1>Signin</h1>
-      <button onClick={activateLasers}>
-        {help ? "Hide help" : "Show help"}
-      </button>
-      {help ? (
-        <Markdown>{content}</Markdown>
-      ) : (
-        <>
-          <button type="button" onClick={onLogin}>
-            Sign In
-          </button>
-          <p>Oops! This page is under construction.</p>
-        </>
-      )}
-    </>
-  );
-}
-
-export default Signin;

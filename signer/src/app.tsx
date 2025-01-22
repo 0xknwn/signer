@@ -1,10 +1,9 @@
 import { Routes, Route } from "react-router";
 import Signin from "./routes/signin.tsx";
-import About from "./routes/about.tsx";
+import More from "./routes/more.tsx";
 import Logout from "./routes/logout.tsx";
 import Accounts from "./routes/accounts.tsx";
 import Transactions from "./routes/transactions.tsx";
-import Messages from "./routes/messages.tsx";
 import Notifier from "./routes/notifier.tsx";
 import { AuthProvider, ProtectedRoute } from "./helpers/authn.tsx";
 import Login from "./routes/login.tsx";
@@ -36,9 +35,8 @@ export const App = () => {
         <Route path="accounts" element={<Accounts />} />
         <Route path="transactions" element={<Transactions />} />
         <Route path="notifier" element={<Notifier />} />
-        <Route path="messages" element={<Messages />} />
         <Route path="logout" element={<Logout />} />
-        <Route path="about" element={<About />} />
+        <Route path="more" element={<More />} />
       </Routes>
     </AuthProvider>
   );

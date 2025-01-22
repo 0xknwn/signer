@@ -37,14 +37,11 @@ function Navbar() {
         <NavLink className="tab" to="/notifier" state={{ from: location }} end>
           Notifier
         </NavLink>
-        <NavLink className="tab" to="/messages" state={{ from: location }} end>
-          Messages
-        </NavLink>
         <NavLink className="tab" to="/logout" state={{ from: location }} end>
           Logout
         </NavLink>
-        <NavLink className="tab" to="/about" state={{ from: location }} end>
-          About
+        <NavLink className="tab" to="/more" state={{ from: location }} end>
+          More...
         </NavLink>
         {token && (
           <button type="button" onClick={onLogout}>

@@ -1,8 +1,3 @@
-import NavBar from "../components/navbar";
-import Markdown from "markdown-to-jsx";
-import { useState } from "react";
-
-const content = `
 # Transactions
 
 On that screen you should have selected the network and account you are using.
@@ -39,7 +34,7 @@ Transactions that have been submitted should be monitored for executions
 Once the transaction has succeeded or failed, it should remain in the history of
 transactions
 
-## \`\`**\`\` Later \`\`**\`\`  Reverse Engineer the transaction
+## `**`Later`**` Reverse Engineer the transaction
 
 This could be an added value to help the user understand what the transaction is
 doing. A good source of inspiration for the associated feature could be this
@@ -60,29 +55,3 @@ Among the feature that we could provide, we could:
 - Integrate ChatGPT or another LLM and say what the function is supposed to do.
   For details of what we can do with the application
 - Assess the risk of running the transaction
-`;
-
-function Transactions() {
-  const [help, setHelp] = useState(false);
-
-  const activateLasers = () => {
-    setHelp(!help);
-  };
-
-  return (
-    <>
-      <NavBar />
-      <h1>Transactions</h1>
-      <button onClick={activateLasers}>
-        {help ? "Hide help" : "Show help"}
-      </button>
-      {help ? (
-        <Markdown>{content}</Markdown>
-      ) : (
-        "Oops! This page is under construction."
-      )}
-    </>
-  );
-}
-
-export default Transactions;
