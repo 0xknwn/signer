@@ -1,10 +1,30 @@
-import NavBar from "./Navbar";
+import NavBar from "../components/navbar";
+import { useAuth } from "../helpers/authn";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router";
 
 function Signin() {
+  const { onLogin } = useAuth();
+  const { token } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log("signin");
+    if (token) {
+      console.log(location.state);
+      const origin = location.state?.from?.pathname || "/dashboard";
+      navigate(origin);
+    }
+  }, []);
+
   return (
     <>
       <NavBar />
       <h1>Signin</h1>
+      <button type="button" onClick={onLogin}>
+        Sign In
+      </button>
       <p>
         The signin page is a mandatory. Its purpose is to create an encryption
         key that can be used to secure a passphrase, aka a set of 12 words that
