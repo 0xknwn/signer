@@ -1,8 +1,5 @@
-import NavBar from "../components/navbar";
-import Markdown from "markdown-to-jsx";
-import { useState } from "react";
+# Networks and Accounts
 
-const content = `
 ## Networks
 
 Networks can be configured to be accessed from the signer. It should come with 3
@@ -61,29 +58,3 @@ result, autorized Dapps are just protocol/domains. The user can remove those.
 This section should keep the history of succeeded and failed transactions
 associated with the account. For details, see the "Transactions" and "Report the
 Transaction" section of this document.
-`;
-
-function Account() {
-  const [help, setHelp] = useState(false);
-
-  const activateLasers = () => {
-    setHelp(!help);
-  };
-
-  return (
-    <>
-      <NavBar />
-      <button onClick={activateLasers}>
-        {help ? "Hide help" : "Show help"}
-      </button>
-      <h1>Networks and Accounts</h1>
-      {help ? (
-        <Markdown>{content}</Markdown>
-      ) : (
-        "Oops! This page is under construction."
-      )}
-    </>
-  );
-}
-
-export default Account;
