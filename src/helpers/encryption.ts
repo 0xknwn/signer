@@ -2,7 +2,7 @@ import { Buffer } from "buffer";
 
 import { mnemonicToSeedSync } from "@scure/bip39";
 import { HDKey } from "@scure/bip32";
-import { getStarkKey, grindKey } from "micro-starknet";
+import { getStarkKey, grindKey } from "@scure/starknet";
 import { encode } from "starknet";
 
 export const STANDARD_DERIVATION_PATH = "m/44'/9004'/0'/0";
