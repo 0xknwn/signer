@@ -18,11 +18,6 @@ export const AuthContext = createContext<{
   resetWallet: () => {},
 });
 
-const fakeAuth = (): Promise<string> =>
-  new Promise((resolve) => {
-    setTimeout(() => resolve("2342f2f1d131rf12"), 250);
-  });
-
 export const useAuth = () => {
   return useContext(AuthContext);
 };
