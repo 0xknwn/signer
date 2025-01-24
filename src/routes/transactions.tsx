@@ -7,15 +7,15 @@ import { content } from "./transactions.help";
 function Transactions() {
   const [help, setHelp] = useState(false);
 
-  const activateLasers = () => {
-    setHelp(!help);
-  };
-
   return (
     <>
       <NavBar />
       <h1>Transactions</h1>
-      <button onClick={activateLasers}>
+      <button
+        onClick={() => {
+          setHelp(!help);
+        }}
+      >
         {help ? "Hide help" : "Show help"}
       </button>
       {help ? (

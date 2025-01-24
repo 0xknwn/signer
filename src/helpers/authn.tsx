@@ -6,16 +6,20 @@ export const AuthContext = createContext<{
   challenge: string;
   verifier: string;
   cipher: string;
+  mnemonic: string;
   setVerifier: (value: string) => void;
   verify: (value: string) => Promise<boolean>;
   resetWallet: () => void;
+  setMnemonic: (value: string) => void;
 }>({
   challenge: "",
   verifier: "",
   cipher: "",
+  mnemonic: "",
   setVerifier: () => {},
   verify: async () => false,
   resetWallet: () => {},
+  setMnemonic: () => {},
 });
 
 export const useAuth = () => {
@@ -29,6 +33,7 @@ type AuthProviderProps = {
 const store = {
   challenge: "smartr-challenge",
   verifier: "smartr-verifier",
+  mnemonic: "smartr-mnemonic",
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
@@ -39,6 +44,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [verifier, setStateVerifier] = useState(
     localStorage.getItem(store.verifier) ?? ""
   );
+  const [mnemonic, setStateMnemonic] = useState(
+    localStorage.getItem(store.mnemonic) ?? ""
+  );
+  const setMnemonic = (value: string) => {
+    localStorage.setItem(store.mnemonic, value);
+    setStateMnemonic(value);
+  };
   const setVerifier = (value: string) => {
     localStorage.setItem(store.verifier, value);
     setStateVerifier(value);
@@ -60,6 +72,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return;
     }
     localStorage.removeItem(store.verifier);
+    localStorage.removeItem(store.mnemonic);
+    setStateMnemonic("");
     navigate("/");
   }, [verifier]);
 
@@ -86,9 +100,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     challenge,
     verifier,
     cipher,
+    mnemonic,
     setVerifier,
     verify,
     resetWallet,
+    setMnemonic,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -99,13 +115,20 @@ type ProtectedRouteProps = {
 };
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { cipher, verifier } = useAuth();
+  const { cipher, verifier, mnemonic } = useAuth();
   const location = useLocation();
   if ((!verifier || verifier === "") && location.pathname !== "/") {
     return <Navigate to="/" replace state={{ from: location }} />;
   }
   if ((!cipher || cipher === "") && location.pathname !== "/login") {
     return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+  if (
+    (!mnemonic || mnemonic === "") &&
+    location.pathname !== "/seed" &&
+    location.pathname !== "/login"
+  ) {
+    return <Navigate to="/seed" replace state={{ from: location }} />;
   }
   return children;
 };

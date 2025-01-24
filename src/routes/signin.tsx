@@ -31,10 +31,6 @@ function Signin() {
   }, [verifier]);
 
   const [help, setHelp] = useState(false);
-
-  const activateLasers = () => {
-    setHelp(!help);
-  };
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
@@ -42,7 +38,11 @@ function Signin() {
     <>
       <NavBar />
       <h1>Signin</h1>
-      <button onClick={activateLasers}>
+      <button
+        onClick={() => {
+          setHelp(!help);
+        }}
+      >
         {help ? "Hide help" : "Show help"}
       </button>
       {help ? (

@@ -5,7 +5,7 @@ import { useAuth } from "../helpers/authn";
 
 function Navbar() {
   const location = useLocation();
-  const { verifier, resetWallet, verify, cipher } = useAuth();
+  const { verifier, resetWallet, verify, cipher, mnemonic } = useAuth();
   const logout = () => {
     verify("");
   };
@@ -18,49 +18,46 @@ function Navbar() {
               <Link className="tab" to="/seed" state={{ from: location }}>
                 Seed
               </Link>
-              <NavLink
-                className="tab"
-                to="/accounts"
-                state={{ from: location }}
-                end
-              >
-                Accounts
-              </NavLink>
-              <NavLink
-                className="tab"
-                to="/transactions"
-                state={{ from: location }}
-                end
-              >
-                Transactions
-              </NavLink>
-              <NavLink
-                className="tab"
-                to="/notifier"
-                state={{ from: location }}
-                end
-              >
-                Notifier
-              </NavLink>
-              <NavLink
-                className="tab"
-                to="/logout"
-                state={{ from: location }}
-                end
-              >
-                Logout
-              </NavLink>
-              <NavLink
-                className="tab"
-                to="/more"
-                state={{ from: location }}
-                end
-              >
-                More...
-              </NavLink>
+              {mnemonic && (
+                <>
+                  {" "}
+                  <NavLink
+                    className="tab"
+                    to="/accounts"
+                    state={{ from: location }}
+                    end
+                  >
+                    Accounts
+                  </NavLink>
+                  <NavLink
+                    className="tab"
+                    to="/transactions"
+                    state={{ from: location }}
+                    end
+                  >
+                    Transactions
+                  </NavLink>
+                  <NavLink
+                    className="tab"
+                    to="/notifier"
+                    state={{ from: location }}
+                    end
+                  >
+                    Notifier
+                  </NavLink>
+                  <NavLink
+                    className="tab"
+                    to="/more"
+                    state={{ from: location }}
+                    end
+                  >
+                    More...
+                  </NavLink>
+                </>
+              )}
               <button type="button" onClick={logout}>
                 Logout
-              </button>
+              </button>{" "}
             </>
           ) : (
             <>

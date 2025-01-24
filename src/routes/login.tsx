@@ -12,12 +12,7 @@ const Login = () => {
   const { cipher, verify } = useAuth();
 
   const [warning, setWarning] = useState(false);
-
   const [help, setHelp] = useState(false);
-
-  const activateLasers = () => {
-    setHelp(!help);
-  };
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const login = async () => {
@@ -40,8 +35,12 @@ const Login = () => {
   return (
     <>
       <Navbar />
-      <h2>Login (Protected)</h2>
-      <button onClick={activateLasers}>
+      <h2>Login</h2>
+      <button
+        onClick={() => {
+          setHelp(!help);
+        }}
+      >
         {help ? "Hide help" : "Show help"}
       </button>
       {help ? (
