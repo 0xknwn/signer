@@ -1,5 +1,4 @@
-# Signin
-
+export const content = `
 Signin to the extension is mandatory. Its creates an encryption key that can be
 used to secure a passphrase, aka a set of 12 words that matches the BIP39
 standard. The encryption/decryption key is generated from the PBKDF2 algorithm
@@ -68,3 +67,4 @@ be saved and the signer does not provide any way to recover it. In addition:
 A user cannot reset a passphrase. Instead he will have to reset the login and go
 back to the initial login page. To proceed, he has to logout and request the
 reset of the login on the login page.
+`;
