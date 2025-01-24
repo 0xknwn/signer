@@ -3,11 +3,17 @@ import { useLocation, useNavigate, Navigate } from "react-router";
 import { useState, useEffect } from "react";
 
 export const AuthContext = createContext<{
+  challenge: string;
+  verifier: string;
+  setVerifier: (value: string) => void;
   token: string;
   onLogin: () => void;
   onLogout: () => void;
 }>({
+  challenge: "",
   token: "",
+  verifier: "",
+  setVerifier: () => {},
   onLogin: () => {},
   onLogout: () => {},
 });
@@ -21,36 +27,48 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
-const loadTokenFromLocalStorage = () => {
-  const init = localStorage.getItem("smartr-token");
-  return init ?? "";
-};
-
-const saveTokenToLocalStorage = (token: string) => {
-  localStorage.setItem("smartr-token", token);
-};
-
-const resetTokenFromLocalStorage = () => {
-  localStorage.removeItem("smartr-token");
-};
-
 type AuthProviderProps = {
   children: React.ReactNode;
+};
+
+const store = {
+  challenge: "smartr-challenge",
+  verifier: "smartr-verifier",
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const [token, setToken] = useState(loadTokenFromLocalStorage());
+  const [token, setToken] = useState(
+    localStorage.getItem("smartr-token") ?? ""
+  );
+  const [challenge, setChallenge] = useState(
+    localStorage.getItem(store.challenge) ?? ""
+  );
+  const [verifier, setStateVerifier] = useState(
+    localStorage.getItem(store.verifier) ?? ""
+  );
+  const setVerifier = (value: string) => {
+    localStorage.setItem(store.verifier, value);
+    setStateVerifier(value);
+  };
 
   useEffect(() => {
     if (token && token !== "") {
-      saveTokenToLocalStorage(token);
+      localStorage.setItem("smartr-token", token);
       return;
     }
-    resetTokenFromLocalStorage();
+    localStorage.removeItem("smartr-token");
   }, [token]);
+
+  useEffect(() => {
+    if (!challenge || challenge === "") {
+      const id = self.crypto.randomUUID();
+      localStorage.setItem(store.challenge, id);
+      setChallenge(id);
+      return;
+    }
+  }, []);
 
   const handleLogin = async () => {
     const token = await fakeAuth();
@@ -64,6 +82,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const value = {
+    challenge,
+    verifier,
+    setVerifier,
     token,
     onLogin: handleLogin,
     onLogout: handleLogout,

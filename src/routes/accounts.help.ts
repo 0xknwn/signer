@@ -1,5 +1,4 @@
-# Networks and Accounts
-
+export const content = `
 ## Networks
 
 Networks can be configured to be accessed from the signer. It should come with 3
@@ -58,3 +57,4 @@ result, autorized Dapps are just protocol/domains. The user can remove those.
 This section should keep the history of succeeded and failed transactions
 associated with the account. For details, see the "Transactions" and "Report the
 Transaction" section of this document.
+`;

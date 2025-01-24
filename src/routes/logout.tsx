@@ -2,9 +2,7 @@ import NavBar from "../components/navbar";
 import Markdown from "markdown-to-jsx";
 import { useState } from "react";
 
-const content = `
-The logout button should disconnect the user and redirect to the signin page.
-`;
+import { content } from "./logout.help";
 
 function Logout() {
   const [help, setHelp] = useState(false);

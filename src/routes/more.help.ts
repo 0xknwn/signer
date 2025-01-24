@@ -1,12 +1,12 @@
-# About
-
+export const content = `
 This pages provides some of the hints that the application may involve in the
 future. The following features are not part of the initial implementation.
 
-## `**`Later`**` Additional features
+## \`**\`Later\`**\` Additional features
 
 The project can provide additional features in the future. This section of the
 documentation provides
+
 
 - **Indexer and Tokens** The signer should be able to list other tokens or data
   that are available on the network (e.g. ERC20, ERC721, transaction history).
@@ -22,3 +22,4 @@ documentation provides
   including the ability to execute transactions on events while disconnected.
 - **Smartr Guard** A service that allows the user to recover a lost wallet in
   case the user has lost the passphrase.
+`;
