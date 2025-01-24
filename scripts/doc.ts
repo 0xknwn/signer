@@ -1,7 +1,6 @@
 import fs from "fs";
 import { content as accounts } from "../src/routes/accounts.help";
 import { content as login } from "../src/routes/login.help";
-import { content as logout } from "../src/routes/logout.help";
 import { content as messages } from "../src/routes/messages.help";
 import { content as more } from "../src/routes/more.help";
 import { content as notifier } from "../src/routes/notifier.help";
@@ -11,7 +10,6 @@ import { content as transactions } from "../src/routes/transactions.help";
 
 fs.writeFileSync("docs/accounts.md", accounts);
 fs.writeFileSync("docs/login.md", login);
-fs.writeFileSync("docs/logout.md", logout);
 fs.writeFileSync("docs/messages.md", messages);
 fs.writeFileSync("docs/more.md", more);
 fs.writeFileSync("docs/notifier.md", notifier);

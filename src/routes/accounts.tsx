@@ -6,15 +6,12 @@ import { content } from "./accounts.help";
 
 function Account() {
   const [help, setHelp] = useState(false);
-
-  const activateLasers = () => {
-    setHelp(!help);
-  };
-
   return (
     <>
       <NavBar />
-      <button onClick={activateLasers}>
+      <button onClick={() => {
+          setHelp(!help);
+        }}>
         {help ? "Hide help" : "Show help"}
       </button>
       <h1>Networks and Accounts</h1>
