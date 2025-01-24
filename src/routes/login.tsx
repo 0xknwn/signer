@@ -1,18 +1,41 @@
 import { useAuth } from "../helpers/authn.tsx";
 import Navbar from "../components/navbar.tsx";
 import Markdown from "markdown-to-jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 
 import { content } from "./login.help";
 
 const Login = () => {
-  const { token } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { cipher, verify } = useAuth();
+
+  const [warning, setWarning] = useState(false);
 
   const [help, setHelp] = useState(false);
 
   const activateLasers = () => {
     setHelp(!help);
   };
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const login = async () => {
+    if (username === "admin" && password === "admin") {
+      verify("123");
+    } else {
+      setWarning(true);
+      setTimeout(() => {
+        setWarning(false);
+      }, 3000);
+    }
+  };
+  useEffect(() => {
+    if (cipher && cipher !== "") {
+      const origin = location.state?.from?.pathname || "/accounts";
+      navigate(origin);
+    }
+  }, [cipher]);
 
   return (
     <>
@@ -24,7 +47,24 @@ const Login = () => {
       {help ? (
         <Markdown>{content}</Markdown>
       ) : (
-        <div>Authenticated as {token}</div>
+        <>
+          <input
+            type="text"
+            placeholder="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button type="button" onClick={login}>
+            LogIn
+          </button>
+          {warning && <p>Invalid username or password</p>}
+        </>
       )}
     </>
   );
