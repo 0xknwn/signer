@@ -5,17 +5,17 @@ import { useState, useEffect } from "react";
 export const AuthContext = createContext<{
   challenge: string;
   verifier: string;
+  cipher: string;
   setVerifier: (value: string) => void;
-  token: string;
-  onLogin: () => void;
-  onLogout: () => void;
+  verify: (value: string) => Promise<boolean>;
+  resetWallet: () => void;
 }>({
   challenge: "",
-  token: "",
   verifier: "",
+  cipher: "",
   setVerifier: () => {},
-  onLogin: () => {},
-  onLogout: () => {},
+  verify: async () => false,
+  resetWallet: () => {},
 });
 
 const fakeAuth = (): Promise<string> =>
@@ -38,10 +38,6 @@ const store = {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [token, setToken] = useState(
-    localStorage.getItem("smartr-token") ?? ""
-  );
   const [challenge, setChallenge] = useState(
     localStorage.getItem(store.challenge) ?? ""
   );
@@ -52,14 +48,25 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     localStorage.setItem(store.verifier, value);
     setStateVerifier(value);
   };
+  const [cipher, setCipher] = useState("");
+
+  const verify = async (key: string) => {
+    if (key !== "123") {
+      setCipher("");
+      return false;
+    }
+    setCipher(key);
+    return true;
+  };
 
   useEffect(() => {
-    if (token && token !== "") {
-      localStorage.setItem("smartr-token", token);
+    if (verifier && verifier !== "") {
+      localStorage.setItem(store.verifier, verifier);
       return;
     }
-    localStorage.removeItem("smartr-token");
-  }, [token]);
+    localStorage.removeItem(store.verifier);
+    navigate("/");
+  }, [verifier]);
 
   useEffect(() => {
     if (!challenge || challenge === "") {
@@ -70,24 +77,23 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, []);
 
-  const handleLogin = async () => {
-    const token = await fakeAuth();
-    setToken(token);
-    const origin = location.state?.from?.pathname || "/login";
-    navigate(origin);
-  };
+  useEffect(() => {
+    if (verifier && verifier !== "" && (!cipher || cipher === "")) {
+      navigate("/login");
+    }
+  }, [cipher]);
 
-  const handleLogout = () => {
-    setToken("");
+  const resetWallet = () => {
+    setVerifier("");
   };
 
   const value = {
     challenge,
     verifier,
+    cipher,
     setVerifier,
-    token,
-    onLogin: handleLogin,
-    onLogout: handleLogout,
+    verify,
+    resetWallet,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -98,12 +104,13 @@ type ProtectedRouteProps = {
 };
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { token } = useAuth();
+  const { cipher, verifier } = useAuth();
   const location = useLocation();
-
-  if (!token) {
+  if ((!verifier || verifier === "") && location.pathname !== "/") {
     return <Navigate to="/" replace state={{ from: location }} />;
   }
-
+  if ((!cipher || cipher === "") && location.pathname !== "/login") {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
   return children;
 };
