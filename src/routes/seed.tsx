@@ -8,7 +8,7 @@ import { wordlist } from "@scure/bip39/wordlists/english";
 import { validateMnemonic, generateMnemonic } from "@scure/bip39";
 
 const Seed = () => {
-  const { mnemonic, setMnemonic } = useAuth();
+  const { passphrase, setPassphrase } = useAuth();
   const [help, setHelp] = useState(false);
   const [valid, setValid] = useState(false);
   const [readOnly, setReadOnly] = useState(true);
@@ -27,30 +27,32 @@ const Seed = () => {
   const [t, setT] = useState("password");
 
   useEffect(() => {
-    if (mnemonic === "") {
+    if (passphrase === "") {
       setReadOnly(false);
       return;
     }
-    const keys = mnemonic.split(" ");
-    if (keys.length !== 12) {
-      return;
-    }
-    setKey0(keys[0]);
-    setKey1(keys[1]);
-    setKey2(keys[2]);
-    setKey3(keys[3]);
-    setKey4(keys[4]);
-    setKey5(keys[5]);
-    setKey6(keys[6]);
-    setKey7(keys[7]);
-    setKey8(keys[8]);
-    setKey9(keys[9]);
-    setKey10(keys[10]);
-    setKey11(keys[11]);
-  }, [mnemonic]);
+    (async () => {
+      const keys = passphrase.split(" ");
+      if (keys.length !== 12) {
+        return;
+      }
+      setKey0(keys[0]);
+      setKey1(keys[1]);
+      setKey2(keys[2]);
+      setKey3(keys[3]);
+      setKey4(keys[4]);
+      setKey5(keys[5]);
+      setKey6(keys[6]);
+      setKey7(keys[7]);
+      setKey8(keys[8]);
+      setKey9(keys[9]);
+      setKey10(keys[10]);
+      setKey11(keys[11]);
+    })();
+  }, [passphrase]);
 
   const save = () => {
-    setMnemonic(
+    setPassphrase(
       `${key0} ${key1} ${key2} ${key3} ${key4} ${key5} ${key6} ${key7} ${key8} ${key9} ${key10} ${key11}`
     );
   };
@@ -96,8 +98,8 @@ const Seed = () => {
     key11,
   ]);
   const generate = () => {
-    const mnemonic = generateMnemonic(wordlist, 128);
-    setMnemonic(mnemonic);
+    const output = generateMnemonic(wordlist, 128);
+    setPassphrase(output);
     setReadOnly(true);
   };
 
@@ -221,7 +223,7 @@ const Seed = () => {
               Save
             </button>
           )}
-          <p>{!valid ? "Invalid Mnemonic" : ""}</p>
+          <p>{!valid ? "Invalid Passphrase" : ""}</p>
         </>
       )}
     </>

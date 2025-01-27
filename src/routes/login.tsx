@@ -3,7 +3,7 @@ import Navbar from "../components/navbar.tsx";
 import Markdown from "markdown-to-jsx";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
-
+import { derive } from "../helpers/encryption.ts";
 import { content } from "./login.help";
 
 const Login = () => {
@@ -16,9 +16,16 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const login = async () => {
-    if (username === "admin" && password === "admin") {
-      verify("123");
-    } else {
+    const { encrypter } = await derive(username, password);
+    try {
+      const checked = await verify(encrypter);
+      if (!checked) {
+        setWarning(true);
+        setTimeout(() => {
+          setWarning(false);
+        }, 3000);
+      }
+    } catch (e) {
       setWarning(true);
       setTimeout(() => {
         setWarning(false);
@@ -26,7 +33,7 @@ const Login = () => {
     }
   };
   useEffect(() => {
-    if (cipher && cipher !== "") {
+    if (cipher) {
       const origin = location.state?.from?.pathname || "/accounts";
       navigate(origin);
     }

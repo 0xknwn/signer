@@ -1,5 +1,6 @@
 import NavBar from "../components/navbar";
 import { useAuth } from "../helpers/authn";
+import { derive, encrypt } from "../helpers/encryption";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
 import Markdown from "markdown-to-jsx";
@@ -8,12 +9,17 @@ import { useState } from "react";
 import { content } from "./signin.help";
 
 function Signin() {
-  const { verifier, setVerifier } = useAuth();
+  const { challenge, verifier, setVerifier } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
   const log = async () => {
-    setVerifier("1234");
+    if (password !== confirm) {
+      return;
+    }
+    const { encrypter } = await derive(username, password);
+    const output = await encrypt(encrypter, challenge);
+    setVerifier(output);
   };
 
   useEffect(() => {
