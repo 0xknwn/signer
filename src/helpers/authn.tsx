@@ -1,25 +1,26 @@
 import { useContext, createContext } from "react";
 import { useLocation, useNavigate, Navigate } from "react-router";
 import { useState, useEffect } from "react";
+import { decrypt, encrypt } from "./encryption";
 
 export const AuthContext = createContext<{
   challenge: string;
   verifier: string;
-  cipher: string;
-  mnemonic: string;
+  cipher: CryptoKey | null;
+  passphrase: string;
+  setPassphrase: (value: string) => void;
   setVerifier: (value: string) => void;
-  verify: (value: string) => Promise<boolean>;
+  verify: (key: CryptoKey | null) => Promise<boolean>;
   resetWallet: () => void;
-  setMnemonic: (value: string) => void;
 }>({
   challenge: "",
   verifier: "",
-  cipher: "",
-  mnemonic: "",
+  cipher: null,
+  passphrase: "",
+  setPassphrase: () => {},
   setVerifier: () => {},
   verify: async () => false,
   resetWallet: () => {},
-  setMnemonic: () => {},
 });
 
 export const useAuth = () => {
@@ -44,26 +45,43 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [verifier, setStateVerifier] = useState(
     localStorage.getItem(store.verifier) ?? ""
   );
-  const [mnemonic, setStateMnemonic] = useState(
-    localStorage.getItem(store.mnemonic) ?? ""
-  );
-  const setMnemonic = (value: string) => {
-    localStorage.setItem(store.mnemonic, value);
-    setStateMnemonic(value);
+  const [passphrase, setStatePassphrase] = useState("");
+  const setPassphrase = async (value: string) => {
+    if (!cipher) {
+      throw new Error("no cipher");
+    }
+    const output = await encrypt(cipher, value);
+    localStorage.setItem(store.mnemonic, output);
+    setStatePassphrase(value);
   };
+
   const setVerifier = (value: string) => {
     localStorage.setItem(store.verifier, value);
     setStateVerifier(value);
   };
-  const [cipher, setCipher] = useState("");
+  const [cipher, setCipher] = useState(null as CryptoKey | null);
 
-  const verify = async (key: string) => {
-    if (key !== "123") {
-      setCipher("");
-      return false;
+  const verify = async (key: CryptoKey | null) => {
+    if (key) {
+      let output = "";
+      try {
+        output = await decrypt(key, verifier);
+      } catch (e) {
+        setCipher(null);
+        return false;
+      }
+      if (output === challenge) {
+        setCipher(key);
+        const mnemonic = localStorage.getItem(store.mnemonic);
+        if (mnemonic && mnemonic !== "") {
+          const decodedPassphrase = await decrypt(key, mnemonic);
+          setStatePassphrase(decodedPassphrase);
+        }
+        return true;
+      }
     }
-    setCipher(key);
-    return true;
+    setCipher(null);
+    return false;
   };
 
   useEffect(() => {
@@ -73,7 +91,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
     localStorage.removeItem(store.verifier);
     localStorage.removeItem(store.mnemonic);
-    setStateMnemonic("");
+    setStatePassphrase("");
     navigate("/");
   }, [verifier]);
 
@@ -87,7 +105,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   useEffect(() => {
-    if (verifier && verifier !== "" && (!cipher || cipher === "")) {
+    if (verifier && verifier !== "" && !cipher) {
       navigate("/login");
     }
   }, [cipher]);
@@ -100,11 +118,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     challenge,
     verifier,
     cipher,
-    mnemonic,
+    passphrase,
+    setPassphrase,
     setVerifier,
     verify,
     resetWallet,
-    setMnemonic,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -115,16 +133,16 @@ type ProtectedRouteProps = {
 };
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { cipher, verifier, mnemonic } = useAuth();
+  const { cipher, verifier, passphrase } = useAuth();
   const location = useLocation();
   if ((!verifier || verifier === "") && location.pathname !== "/") {
     return <Navigate to="/" replace state={{ from: location }} />;
   }
-  if ((!cipher || cipher === "") && location.pathname !== "/login") {
+  if (!cipher && location.pathname !== "/login") {
     return <Navigate to="/login" replace state={{ from: location }} />;
   }
   if (
-    (!mnemonic || mnemonic === "") &&
+    (!passphrase || passphrase === "") &&
     location.pathname !== "/seed" &&
     location.pathname !== "/login"
   ) {

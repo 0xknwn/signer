@@ -5,9 +5,9 @@ import { useAuth } from "../helpers/authn";
 
 function Navbar() {
   const location = useLocation();
-  const { verifier, resetWallet, verify, cipher, mnemonic } = useAuth();
-  const logout = () => {
-    verify("");
+  const { verifier, resetWallet, verify, cipher, passphrase } = useAuth();
+  const logout = async () => {
+    await verify(null);
   };
   return (
     <>
@@ -18,7 +18,7 @@ function Navbar() {
               <Link className="tab" to="/seed" state={{ from: location }}>
                 Seed
               </Link>
-              {mnemonic && (
+              {passphrase && (
                 <>
                   {" "}
                   <NavLink
