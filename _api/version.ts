@@ -11,7 +11,7 @@ export const streaming = true;
 //   expiration: 30,
 // };
 
-export default async function handler(request: Request) {
+export default async function handler(_: Request) {
   // const res = await fetch(`${process.env.BACKEND_URL}/version`);
   const res = { json: async () => ({ version: "1.0.0" }) };
   const out = await res.json();
