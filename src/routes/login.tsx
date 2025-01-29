@@ -1,10 +1,11 @@
-import { useAuth } from "../helpers/authn.tsx";
-import Navbar from "../components/navbar.tsx";
+import { useAuth } from "../helpers/authn";
+import Navbar from "../components/navbar";
 import Markdown from "markdown-to-jsx";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
-import { derive } from "../helpers/encryption.ts";
+import { derive } from "../helpers/encryption";
 import { content } from "./login.help";
+import { store } from "../helpers/store";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,7 +14,13 @@ const Login = () => {
 
   const [warning, setWarning] = useState(false);
   const [help, setHelp] = useState(false);
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(
+    localStorage.getItem(store.username) || ""
+  );
+  const setAndSaveUsername = (value: string) => {
+    localStorage.setItem(store.username, value);
+    setUsername(value);
+  };
   const [password, setPassword] = useState("");
   const login = async () => {
     const { encrypter } = await derive(username, password);
@@ -58,7 +65,7 @@ const Login = () => {
             type="text"
             placeholder="username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => setAndSaveUsername(e.target.value)}
           />
           <input
             type="password"
