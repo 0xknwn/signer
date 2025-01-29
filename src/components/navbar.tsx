@@ -1,15 +1,10 @@
 import { useLocation, NavLink } from "react-router";
 import "./navbar.css";
 import { useAuth } from "../helpers/authn";
-import { useEffect } from "react";
 
 function Navbar() {
   const location = useLocation();
   const { verifier, resetWallet, verify, cipher, passphrase } = useAuth();
-  useEffect(() => {
-    console.log("path:", location.pathname);
-  }, [location]);
-
   const logout = async () => {
     await verify(null);
   };
@@ -33,7 +28,6 @@ function Navbar() {
                     className="tab"
                     to="/accounts"
                     state={{ from: location }}
-                    end
                   >
                     Accounts
                   </NavLink>
@@ -58,7 +52,6 @@ function Navbar() {
                       className="tab"
                       to="/more"
                       state={{ from: location }}
-                      end
                     >
                       More...
                     </NavLink>

@@ -21,7 +21,6 @@ function Transactions() {
 
   const getChainId = async () => {
     const chainId = await provider.getChainId();
-    console.log("chainId", chainId);
     return chainId.toString();
   };
 
