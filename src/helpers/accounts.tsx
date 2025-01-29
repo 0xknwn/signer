@@ -1,6 +1,6 @@
 import { useContext, createContext } from "react";
 import { useState, useEffect } from "react";
-import { store } from "./authn";
+import { store } from "./store";
 import {
   classHash as accountClassHash,
   SmartrAccountABI,

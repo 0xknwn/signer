@@ -2,7 +2,7 @@ import { useContext, createContext } from "react";
 import { useLocation, useNavigate, Navigate } from "react-router";
 import { useState, useEffect } from "react";
 import { decrypt, encrypt } from "./encryption";
-import { useAccounts } from "./accounts";
+import { store } from "./store";
 
 export const AuthContext = createContext<{
   challenge: string;
@@ -30,14 +30,6 @@ export const useAuth = () => {
 
 type AuthProviderProps = {
   children: React.ReactNode;
-};
-
-export const store = {
-  challenge: "smartr-challenge",
-  verifier: "smartr-verifier",
-  mnemonic: "smartr-mnemonic",
-  accounts: "smartr-accounts",
-  username: "smartr-username",
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
