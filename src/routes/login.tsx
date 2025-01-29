@@ -1,11 +1,11 @@
-import { useAuth } from "../helpers/authn.tsx";
-import Navbar from "../components/navbar.tsx";
+import { useAuth } from "../helpers/authn";
+import Navbar from "../components/navbar";
 import Markdown from "markdown-to-jsx";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
-import { derive } from "../helpers/encryption.ts";
+import { derive } from "../helpers/encryption";
 import { content } from "./login.help";
-import { store } from "../helpers/authn.tsx";
+import { store } from "../helpers/store";
 
 const Login = () => {
   const navigate = useNavigate();
