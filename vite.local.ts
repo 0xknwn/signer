@@ -1,7 +1,7 @@
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import vercel from "vite-plugin-vercel";
-import API from "./vite/plugin";
+import API from "./localonly/plugin";
 
 // https://vite.dev/config/
 export default defineConfig({
