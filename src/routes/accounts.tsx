@@ -1,6 +1,6 @@
 import NavBar from "../components/navbar";
 import Markdown from "markdown-to-jsx";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { content } from "./accounts.help";
 import { useAuth, type account } from "../helpers/authn";
