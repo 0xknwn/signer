@@ -11,6 +11,7 @@ import NoMatch from "./routes/404.tsx";
 import Setup from "./routes/accounts/setup.tsx";
 import Tokens from "./routes/accounts/tokens.tsx";
 import History from "./routes/accounts/history.tsx";
+import Faucet from "./routes/more/faucet.tsx";
 import { AccountsProvider } from "./helpers/accounts.tsx";
 
 export const App = () => {
@@ -109,7 +110,41 @@ export const App = () => {
                   <More />
                 </ProtectedRoute>
               }
-            />
+            >
+              <Route
+                index
+                element={
+                  <ProtectedRoute>
+                    <Faucet />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="faucet"
+                element={
+                  <ProtectedRoute>
+                    <Faucet />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="classes"
+                element={
+                  <ProtectedRoute>
+                    <NoMatch />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="contracts"
+                element={
+                  <ProtectedRoute>
+                    <NoMatch />
+                  </ProtectedRoute>
+                }
+              />{" "}
+              <Route path="*" element={<NoMatch />} />
+            </Route>
           )}
         </Routes>
       </AccountsProvider>
