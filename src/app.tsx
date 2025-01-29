@@ -101,14 +101,16 @@ export const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="more"
-            element={
-              <ProtectedRoute>
-                <More />
-              </ProtectedRoute>
-            }
-          />
+          {import.meta.env.MODE === "development" && (
+            <Route
+              path="more"
+              element={
+                <ProtectedRoute>
+                  <More />
+                </ProtectedRoute>
+              }
+            />
+          )}
         </Routes>
       </AccountsProvider>
     </AuthProvider>

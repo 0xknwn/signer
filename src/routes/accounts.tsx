@@ -1,7 +1,7 @@
 import NavBar from "../components/navbar";
 import Markdown from "markdown-to-jsx";
 import { useState } from "react";
-import { Link, Outlet } from "react-router";
+import { NavLink, Outlet } from "react-router";
 import { content } from "./accounts.help";
 
 function Account() {
@@ -23,15 +23,15 @@ function Account() {
       ) : (
         <>
           <nav>
-            <Link className="tab" to="setup">
+            <NavLink className="tab" to="setup">
               Setup
-            </Link>
-            <Link className="tab" to="tokens">
+            </NavLink>
+            <NavLink className="tab" to="tokens">
               Tokens
-            </Link>
-            <Link className="tab" to="history">
+            </NavLink>
+            <NavLink className="tab" to="history">
               History
-            </Link>
+            </NavLink>
           </nav>
           <Outlet />
         </>

@@ -77,6 +77,7 @@ const Login = () => {
             LogIn
           </button>
           {warning && <p>Invalid username or password</p>}
+          {import.meta.env.MODE === "development" && <p>development</p>}
         </>
       )}
     </>

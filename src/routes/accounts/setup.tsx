@@ -1,4 +1,5 @@
 import { useAccounts, type account } from "../../helpers/accounts";
+import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
 function Setup() {
   const {
     accounts,
@@ -33,8 +34,48 @@ function Setup() {
             ))}
           </select>
           <div>
-            <p>Address: {accounts[selectedAccountNumber].address}</p>
-            <p>Public key: {accounts[selectedAccountNumber].publickey}</p>
+            <div>
+              Address:{" "}
+              <Jazzicon
+                diameter={32}
+                seed={jsNumberForAddress(
+                  accounts[selectedAccountNumber].address
+                )}
+              />{" "}
+              {accounts[selectedAccountNumber].address.substring(0, 6) +
+                "..." +
+                accounts[selectedAccountNumber].address.substring(
+                  accounts[selectedAccountNumber].address.length - 4,
+                  accounts[selectedAccountNumber].address.length
+                )}
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    accounts[selectedAccountNumber].address
+                  );
+                }}
+              >
+                Copy
+              </button>
+            </div>
+            <div>
+              Public key:{" "}
+              {accounts[selectedAccountNumber].publickey.substring(0, 6) +
+                "..." +
+                accounts[selectedAccountNumber].publickey.substring(
+                  accounts[selectedAccountNumber].publickey.length - 4,
+                  accounts[selectedAccountNumber].publickey.length
+                )}
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    accounts[selectedAccountNumber].publickey
+                  );
+                }}
+              >
+                Copy
+              </button>
+            </div>
           </div>
         </>
       ) : (
