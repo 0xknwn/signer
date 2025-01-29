@@ -1,7 +1,8 @@
 import { useAccounts } from "../../helpers/accounts";
 
 function Tokens() {
-  const { accounts, selectedAccountNumber } = useAccounts();
+  const { accounts, selectedAccountNumber, tokens, refreshTokens } =
+    useAccounts();
   return (
     <>
       {accounts && accounts.length > 0 && (
@@ -10,7 +11,13 @@ function Tokens() {
           <p>Public key: {accounts[selectedAccountNumber].publickey}</p>
         </div>
       )}
-      <p>Here you can see tokens</p>
+      <h2>Tokens</h2>
+      <button onClick={refreshTokens}>Refresh</button>
+      {tokens.map((token) => (
+        <div key={token.address}>
+          {token.name}: {token.value}
+        </div>
+      ))}
     </>
   );
 }
