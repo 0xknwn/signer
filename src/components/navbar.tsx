@@ -2,10 +2,15 @@ import { NavLink } from "react-router";
 import "./navbar.css";
 import { useLocation, Link } from "react-router";
 import { useAuth } from "../helpers/authn";
+import { useEffect } from "react";
 
 function Navbar() {
   const location = useLocation();
   const { verifier, resetWallet, verify, cipher, passphrase } = useAuth();
+  useEffect(() => {
+    console.log("path:", location.pathname);
+  }, [location]);
+
   const logout = async () => {
     await verify(null);
   };
@@ -15,12 +20,16 @@ function Navbar() {
         {verifier ? (
           cipher ? (
             <>
-              <Link className="tab" to="/seed" state={{ from: location }}>
+              <NavLink
+                className="tab"
+                to="/seed"
+                state={{ from: location }}
+                end
+              >
                 Seed
-              </Link>
+              </NavLink>
               {passphrase && (
                 <>
-                  {" "}
                   <NavLink
                     className="tab"
                     to="/accounts"
@@ -45,14 +54,16 @@ function Navbar() {
                   >
                     Notifier
                   </NavLink>
-                  <NavLink
-                    className="tab"
-                    to="/more"
-                    state={{ from: location }}
-                    end
-                  >
-                    More...
-                  </NavLink>
+                  {import.meta.env.MODE === "development" && (
+                    <NavLink
+                      className="tab"
+                      to="/more"
+                      state={{ from: location }}
+                      end
+                    >
+                      More...
+                    </NavLink>
+                  )}
                 </>
               )}
               <button type="button" onClick={logout}>
