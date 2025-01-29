@@ -1,6 +1,5 @@
-import { NavLink } from "react-router";
+import { useLocation, NavLink } from "react-router";
 import "./navbar.css";
-import { useLocation, Link } from "react-router";
 import { useAuth } from "../helpers/authn";
 import { useEffect } from "react";
 
