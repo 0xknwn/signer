@@ -3,7 +3,7 @@ import Markdown from "markdown-to-jsx";
 import { useEffect, useState } from "react";
 import { useAccounts } from "../helpers/accounts";
 import { content } from "./more.help";
-import { Account, RpcProvider, Contract, cairo, type RPC07 } from "starknet";
+import { Account, RpcProvider, Contract, cairo } from "starknet";
 import { ERC20ABI } from "@0xknwn/starknet-modular-account";
 
 const seed0z = {
@@ -59,17 +59,6 @@ function More() {
       getTransactionStatus();
     }
   }, [refresh]);
-  // {"type":"INVOKE",
-  // "transaction_hash":"0x62c30650eeeabff73357e7d5432a960132e54c570835e097640668cd7bf1def",
-  // "actual_fee":{"unit":"FRI","amount":"0x13d3b5419000"},
-  // "messages_sent":[],
-  // "events":[{"from_address":"0x4718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d","keys":["0x99cd8bde557814842a3121e8ddfd433a539b8c9f14bf31ebf108d12e6196e9","0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691","0xb2e3a2241a5143e804991cd1ae583abb2a4590ae0b3d37b32e79c9b8bda4fd"],"data":["0x2b5e3af16b1880000","0x0"]},
-  //           {"from_address":"0x4718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d","keys":["0x99cd8bde557814842a3121e8ddfd433a539b8c9f14bf31ebf108d12e6196e9","0x64b48806902a367c8598f4f95c305e8c1a1acba5f082d294a43793113115691","0x1000"],"data":["0x13d3b5419000","0x0"]}],
-  // "execution_status":"SUCCEEDED",
-  // "finality_status":"ACCEPTED_ON_L2",
-  // "block_hash":"0x3b2711fe29eba45f2a0250c34901d15e37b495599fac1a74960a09cc83e1234",
-  // "block_number":4,
-  // "execution_resources":{"steps":9045,"memory_holes":176,"range_check_builtin_applications":267,"pedersen_builtin_applications":25,"poseidon_builtin_applications":4,"ec_op_builtin_applications":3,"data_availability":{"l1_gas":0,"l1_data_gas":192}}}
 
   useEffect(() => {
     if (status === "SUCCEEDED") {
