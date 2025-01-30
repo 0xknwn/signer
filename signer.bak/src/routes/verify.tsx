@@ -1,5 +1,5 @@
 import { useState, useEffect, ChangeEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { verify } from "../requests/verify.ts";
 import { useContext, ReactNode } from "react";
 import { Authn } from "../context/authn.tsx";
