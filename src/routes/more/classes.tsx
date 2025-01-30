@@ -1,4 +1,4 @@
-import Declare from "../../components/classes/declare";
+import Declare from "../../components/declare";
 import { classNames as accountClassNames } from "@0xknwn/starknet-modular-account";
 import { classNames as helpersClassNames } from "@0xknwn/starknet-test-helpers";
 
