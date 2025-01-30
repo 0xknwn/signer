@@ -3,6 +3,7 @@ import Markdown from "markdown-to-jsx";
 import { useEffect, useState } from "react";
 import { RpcProvider, shortString } from "starknet";
 import { content } from "./transactions.help";
+import { ChainId } from "@starknet-io/types-js";
 
 function Transactions() {
   const [help, setHelp] = useState(false);
@@ -21,7 +22,7 @@ function Transactions() {
   }, []);
 
   const getChainId = async () => {
-    const chainId = await provider.getChainId();
+    const chainId = (await provider.getChainId()) as ChainId;
     return chainId.toString();
   };
 
