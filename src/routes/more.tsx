@@ -32,6 +32,9 @@ function More() {
             <NavLink className="tab" to="contracts">
               Contracts
             </NavLink>
+            <NavLink className="tab" to="calls">
+              Calls
+            </NavLink>
           </nav>
           <Outlet />
         </>

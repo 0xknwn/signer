@@ -120,7 +120,7 @@ function Declare({ className }: Props) {
           {printStatus()}
         </>
       ) : isDeclared == "true" ? (
-        <p>account is already declared</p>
+        <p>{className.toString()} is already declared</p>
       ) : (
         <p>loading...</p>
       )}

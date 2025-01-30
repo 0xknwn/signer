@@ -11,6 +11,7 @@ function Transactions() {
   const provider = new RpcProvider({ nodeUrl: providerURL });
 
   const [chainId, setChainId] = useState("");
+  const [calls, setCalls] = useState("[]");
 
   useEffect(() => {
     (async () => {
@@ -41,6 +42,13 @@ function Transactions() {
         <>
           <button onClick={getChainId}>Get chain id</button>
           <p>Chain id: {chainId}</p>
+          <textarea
+            value={calls}
+            onChange={(e) => {
+              setCalls(e.target.value);
+            }}
+            id="transaction"
+          />
         </>
       )}
     </>
