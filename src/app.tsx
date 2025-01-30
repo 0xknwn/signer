@@ -12,6 +12,7 @@ import Setup from "./routes/accounts/setup.tsx";
 import Tokens from "./routes/accounts/tokens.tsx";
 import History from "./routes/accounts/history.tsx";
 import Faucet from "./routes/more/faucet.tsx";
+import Classes from "./routes/more/classes.tsx";
 import { AccountsProvider } from "./helpers/accounts.tsx";
 
 export const App = () => {
@@ -131,7 +132,7 @@ export const App = () => {
                 path="classes"
                 element={
                   <ProtectedRoute>
-                    <NoMatch />
+                    <Classes />
                   </ProtectedRoute>
                 }
               />

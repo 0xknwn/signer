@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@0xknwn/starknet-modular-account": "^0.2.5",
+    "@0xknwn/starknet-test-helpers": "^0.2.5",
     "@eslint/js": "^9.17.0",
     "@scure/bip32": "^1.6.2",
     "@scure/bip39": "^1.5.4",
