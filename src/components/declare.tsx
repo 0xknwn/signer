@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Account, RpcProvider } from "starknet";
 import {
   declareClass as accountDeclareClass,
   classNames as accountClassNames,
+  classHash as accountClassHash,
 } from "@0xknwn/starknet-modular-account";
 import {
   declareClass as helpersDeclareClass,
   classNames as helpersClassNames,
+  classHash as helpersClassHash,
 } from "@0xknwn/starknet-test-helpers";
 
 type Props = {
@@ -20,8 +22,41 @@ function Declare({ className }: Props) {
     publicKey: import.meta.env.VITE_OZ_PUBLIC_KEY,
   };
 
+  const [isDeclared, setIsDeclared] = useState("init");
   const [classHash, setClassHash] = useState("0x0");
   const [status, setStatus] = useState("unknown");
+
+  useEffect(() => {
+    const fetchClassHash = async () => {
+      switch (className) {
+        case accountClassNames.SmartrAccount:
+        case accountClassNames.StarkValidator:
+          const accountHash = await accountClassHash(className);
+          setClassHash(accountHash);
+          break;
+        case helpersClassNames.Counter:
+          const helperHash = await helpersClassHash(className);
+          setClassHash(helperHash);
+          break;
+      }
+    };
+    fetchClassHash();
+  }, [classHash]);
+
+  useEffect(() => {
+    const fetchDeclaredStatus = async () => {
+      const provider = new RpcProvider({
+        nodeUrl: "http://localhost:5173/rpc",
+      });
+      const d = await provider.getClassByHash(classHash);
+      if (d) {
+        setIsDeclared("true");
+        return;
+      }
+      setIsDeclared("false");
+    };
+    fetchDeclaredStatus();
+  }, [classHash]);
 
   const declareSmartr = async () => {
     setStatus("RUNNING");
@@ -79,8 +114,16 @@ function Declare({ className }: Props) {
 
   return (
     <>
-      <button onClick={declareSmartr}>{className.toString()}</button>
-      {printStatus()}
+      {isDeclared == "false" ? (
+        <>
+          <button onClick={declareSmartr}>{className.toString()}</button>
+          {printStatus()}
+        </>
+      ) : isDeclared == "true" ? (
+        <p>account is already declared</p>
+      ) : (
+        <p>loading...</p>
+      )}
     </>
   );
 }
