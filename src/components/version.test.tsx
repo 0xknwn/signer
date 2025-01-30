@@ -4,13 +4,11 @@ import "@testing-library/jest-dom/vitest";
 import { setupServer } from "msw/node";
 import { http, HttpResponse } from "msw";
 
-const posts = { version: "mock" };
-
 export const restHandlers = [
   http.get(
     "http://localhost:3000/version",
     () => {
-      return HttpResponse.json(posts);
+      return HttpResponse.json({ version: "mock" });
     },
     {}
   ),
