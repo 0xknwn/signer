@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router";
 import { derive } from "../helpers/encryption";
 import { content } from "./login.help";
 import { store } from "../helpers/store";
+import Version from "../components/version";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ const Login = () => {
       }, 3000);
     }
   };
+
   useEffect(() => {
     if (cipher) {
       const origin = location.state?.from?.pathname || "/accounts";
@@ -77,7 +79,7 @@ const Login = () => {
             LogIn
           </button>
           {warning && <p>Invalid username or password</p>}
-          {import.meta.env.MODE === "development" && <p>development</p>}
+          <Version />
         </>
       )}
     </>
