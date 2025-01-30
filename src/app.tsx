@@ -14,7 +14,9 @@ import History from "./routes/accounts/history.tsx";
 import Faucet from "./routes/more/faucet.tsx";
 import Classes from "./routes/more/classes.tsx";
 import Contracts from "./routes/more/contracts.tsx";
+import Calls from "./routes/more/calls.tsx";
 import { AccountsProvider } from "./helpers/accounts.tsx";
+import { classNames as helpersClassNames } from "@0xknwn/starknet-test-helpers";
 
 export const App = () => {
   return (
@@ -142,6 +144,14 @@ export const App = () => {
                 element={
                   <ProtectedRoute>
                     <Contracts />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="calls"
+                element={
+                  <ProtectedRoute>
+                    <Calls name={helpersClassNames.Counter} />
                   </ProtectedRoute>
                 }
               />
