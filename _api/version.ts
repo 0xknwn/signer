@@ -13,7 +13,7 @@ export const streaming = true;
 
 export default async function handler(_: Request) {
   // const res = await fetch(`${process.env.BACKEND_URL}/version`);
-  const res = { json: async () => ({ version: "1.0.0" }) };
+  const res = { json: async () => ({ version: "dev" }) };
   const out = await res.json();
 
   const response = new Response(JSON.stringify({ version: out.version }), {

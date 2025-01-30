@@ -9,3 +9,9 @@ describe("something truthy and falsy", () => {
     expect(false).toBe(false);
   });
 });
+
+describe("test environment variables", () => {
+  it("MODE should be test", () => {
+    expect(import.meta.env.MODE).toBe("test");
+  });
+});
