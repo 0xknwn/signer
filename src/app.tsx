@@ -13,6 +13,7 @@ import Tokens from "./routes/accounts/tokens.tsx";
 import History from "./routes/accounts/history.tsx";
 import Faucet from "./routes/more/faucet.tsx";
 import Classes from "./routes/more/classes.tsx";
+import Contracts from "./routes/more/contracts.tsx";
 import { AccountsProvider } from "./helpers/accounts.tsx";
 
 export const App = () => {
@@ -140,10 +141,10 @@ export const App = () => {
                 path="contracts"
                 element={
                   <ProtectedRoute>
-                    <NoMatch />
+                    <Contracts />
                   </ProtectedRoute>
                 }
-              />{" "}
+              />
               <Route path="*" element={<NoMatch />} />
             </Route>
           )}
