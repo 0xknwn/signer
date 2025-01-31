@@ -7,8 +7,9 @@ import { derive } from "../helpers/encryption";
 import { content } from "./login.help";
 import { store } from "../helpers/store";
 import Version from "../components/version";
-
+import { usePolling } from "../helpers/polling_context";
 const Login = () => {
+  const { refresh } = usePolling();
   const navigate = useNavigate();
   const location = useLocation();
   const { cipher, verify } = useAuthn();
@@ -60,7 +61,10 @@ const Login = () => {
         {help ? "Hide help" : "Show help"}
       </button>
       {help ? (
-        <Markdown>{content}</Markdown>
+        <>
+          <Markdown>{content}</Markdown>
+          <div>{refresh}</div>
+        </>
       ) : (
         <>
           <input
