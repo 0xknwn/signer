@@ -3,7 +3,7 @@ import Markdown from "markdown-to-jsx";
 import { useEffect, useState } from "react";
 
 import { content } from "./seed.help";
-import { useAuth } from "../helpers/authn.tsx";
+import { useAuth } from "../helpers/authn_context";
 import { wordlist } from "@scure/bip39/wordlists/english";
 import { validateMnemonic, generateMnemonic } from "@scure/bip39";
 

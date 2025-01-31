@@ -8,12 +8,12 @@ import { encode } from "starknet";
 export const STANDARD_DERIVATION_PATH = "m/44'/9004'/0'/0";
 
 export const derive = async (email: string, password: string) => {
-  let rely_party = window.location.hostname;
+  const rely_party = window.location.hostname;
   if (!rely_party || rely_party === "") {
     throw new Error("rely_party is not set");
   }
   const enc = new TextEncoder();
-  let root = enc.encode(`${rely_party}/${password}`);
+  const root = enc.encode(`${rely_party}/${password}`);
   const material = await window.crypto.subtle.importKey(
     "raw",
     root,
@@ -22,7 +22,7 @@ export const derive = async (email: string, password: string) => {
     ["deriveBits", "deriveKey"]
   );
 
-  let encrypter = await window.crypto.subtle.deriveKey(
+  const encrypter = await window.crypto.subtle.deriveKey(
     {
       name: "PBKDF2",
       salt: enc.encode(`${email}/0`),
@@ -35,7 +35,7 @@ export const derive = async (email: string, password: string) => {
     ["encrypt", "decrypt"]
   );
 
-  let signer = await window.crypto.subtle.deriveKey(
+  const signer = await window.crypto.subtle.deriveKey(
     {
       name: "PBKDF2",
       salt: enc.encode(`${email}/1`),
@@ -56,7 +56,7 @@ export const encrypt = async (encrypter: CryptoKey | null, data: string) => {
     throw new Error("no encrypter");
   }
   const enc = new TextEncoder();
-  let root = enc.encode(data);
+  const root = enc.encode(data);
 
   const iv = new Uint8Array(256);
   window.crypto.getRandomValues(iv);

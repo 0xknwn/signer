@@ -28,13 +28,13 @@ const computeContractAddress = async (
   );
 };
 
-function Deploy({ className }: Props) {
-  const seed0z = {
-    address: import.meta.env.VITE_OZ_ACCOUNT_ADDRESS,
-    privateKey: import.meta.env.VITE_OZ_PRIVATE_KEY,
-    publicKey: import.meta.env.VITE_OZ_PUBLIC_KEY,
-  };
+const seed0z = {
+  address: import.meta.env.VITE_OZ_ACCOUNT_ADDRESS,
+  privateKey: import.meta.env.VITE_OZ_PRIVATE_KEY,
+  publicKey: import.meta.env.VITE_OZ_PUBLIC_KEY,
+};
 
+function Deploy({ className }: Props) {
   const [classHash, setClassHash] = useState("0x0");
   const [contractAddress, setContractAddress] = useState("0x0");
   const [transactionHash, setTransactionHash] = useState("0x0");
@@ -44,11 +44,11 @@ function Deploy({ className }: Props) {
 
   useEffect(() => {
     const fetchClassHash = async () => {
-      const classHash = await helpersClassHash(className);
+      const classHash = helpersClassHash(className);
       setClassHash(classHash);
     };
     fetchClassHash();
-  }, [classHash]);
+  }, [classHash, className]);
 
   useEffect(() => {
     const myCallData = new CallData(CounterABI);
@@ -64,15 +64,15 @@ function Deploy({ className }: Props) {
       setContractAddress(address);
     };
     fetchContractAddress();
-  }, [classHash]);
+  }, [classHash, className]);
 
   useEffect(() => {
     const fetchDeclaredStatus = async () => {
+      if (classHash === "0x0") return;
       const provider = new RpcProvider({
         nodeUrl: "http://localhost:5173/rpc",
       });
-      const d = await provider.getClassByHash(classHash);
-      console.log(d);
+      await provider.getClassByHash(classHash);
       setIsDeclared(true);
     };
     fetchDeclaredStatus();
@@ -86,7 +86,6 @@ function Deploy({ className }: Props) {
         nodeUrl: "http://localhost:5173/rpc",
       });
       const hash = await provider.getClassHashAt(contractAddress);
-      console.log(hash, classHash);
       if (hash === classHash) {
         setIsDeployed(true);
       } else {
@@ -95,7 +94,7 @@ function Deploy({ className }: Props) {
       }
     };
     fetchDeploymentStatus();
-  }, [contractAddress]);
+  }, [contractAddress, classHash]);
 
   const deployContract = async () => {
     setStatus("RUNNING");
@@ -129,7 +128,7 @@ function Deploy({ className }: Props) {
       setTransactionHash(transaction_hash);
       await account.waitForTransaction(transaction_hash);
       setStatus("SUCCEEDED");
-    } catch (e) {
+    } catch {
       setStatus("ERROR");
     }
   };

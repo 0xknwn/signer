@@ -86,7 +86,7 @@ function Calls({ name: className }: Props) {
         } else {
           setIsDeployed(false);
         }
-      } catch (e) {
+      } catch {
         setIsDeployed(false);
       }
     };

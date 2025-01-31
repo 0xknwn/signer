@@ -1,4 +1,4 @@
-import { useAccounts, type account } from "../../helpers/accounts";
+import { useAccounts, type account } from "../../helpers/account_context";
 import AccountComponent from "../../components/account";
 import { useEffect, useState } from "react";
 import { RpcProvider, Signer, CallData } from "starknet";
@@ -10,7 +10,7 @@ import {
   SmartrAccountABI,
   classNames,
 } from "@0xknwn/starknet-modular-account";
-import { useAuth } from "../../helpers/authn";
+import { useAuth } from "../../helpers/authn_context";
 import { getKeys } from "../../helpers/encryption";
 
 function Setup() {
@@ -38,11 +38,8 @@ function Setup() {
       passphrase,
       selectedAccountNumber
     );
-    console.log("publicKey", publicKey);
-    console.log("privateKey", privateKey);
     const smartrSigner = new Signer(privateKey);
     const smartrAccountPublicKey = await smartrSigner.getPubKey();
-    console.log("smartrAccountPublicKey", smartrAccountPublicKey);
     const starkValidatorClassHash = classHash(classNames.StarkValidator);
     const calldata = new CallData(SmartrAccountABI).compile("constructor", {
       core_validator: starkValidatorClassHash,
@@ -53,7 +50,6 @@ function Setup() {
       smartrAccountPublicKey,
       calldata
     );
-    console.log("smartrAccountAddress", smartrAccountAddress);
     const smartrAccount = new SmartrAccount(
       provider,
       smartrAccountAddress,
@@ -63,15 +59,14 @@ function Setup() {
       "0x3"
     );
     try {
-      const address = await deployAccount(
+      await deployAccount(
         smartrAccount,
         classNames.SmartrAccount,
         publicKey,
         calldata
       );
-      console.log("address", address);
       setDeployedStatus("deployed");
-    } catch (e) {
+    } catch {
       setDeployedStatus("undeployed");
     }
   };
@@ -82,7 +77,7 @@ function Setup() {
       try {
         await provider.getClassHashAt(accounts[selectedAccountNumber].address);
         setDeployedStatus("deployed");
-      } catch (e) {
+      } catch {
         setDeployedStatus("undeployed");
       }
     };

@@ -30,18 +30,18 @@ function Declare({ className }: Props) {
     const fetchClassHash = async () => {
       switch (className) {
         case accountClassNames.SmartrAccount:
+          setClassHash(accountClassHash(accountClassNames.SmartrAccount));
+          break;
         case accountClassNames.StarkValidator:
-          const accountHash = await accountClassHash(className);
-          setClassHash(accountHash);
+          setClassHash(accountClassHash(accountClassNames.StarkValidator));
           break;
         case helpersClassNames.Counter:
-          const helperHash = await helpersClassHash(className);
-          setClassHash(helperHash);
+          setClassHash(helpersClassHash(helpersClassNames.Counter));
           break;
       }
     };
     fetchClassHash();
-  }, [classHash]);
+  }, [classHash, className]);
 
   useEffect(() => {
     const fetchDeclaredStatus = async () => {
@@ -55,7 +55,7 @@ function Declare({ className }: Props) {
           return;
         }
         setIsDeclared("false");
-      } catch (e) {
+      } catch {
         setIsDeclared("false");
       }
     };
@@ -72,25 +72,32 @@ function Declare({ className }: Props) {
       "1",
       "0x3"
     );
-    let classHash = "0x0";
     switch (className) {
-      case accountClassNames.SmartrAccount:
-      case accountClassNames.StarkValidator:
-        const { classHash: accountClassHash } = await accountDeclareClass(
+      case accountClassNames.SmartrAccount: {
+        const smartrAccountClassHash = await accountDeclareClass(
           a,
-          className
+          accountClassNames.SmartrAccount
         );
-        classHash = accountClassHash;
+        setClassHash(smartrAccountClassHash.classHash);
         break;
-      case helpersClassNames.Counter:
-        const { classHash: helpersClassHash } = await helpersDeclareClass(
+      }
+      case accountClassNames.StarkValidator: {
+        const starkValidatorClassHash = await accountDeclareClass(
           a,
-          className
+          accountClassNames.StarkValidator
         );
-        classHash = helpersClassHash;
+        setClassHash(starkValidatorClassHash.classHash);
         break;
+      }
+      case helpersClassNames.Counter: {
+        const counterClassHash = await helpersDeclareClass(
+          a,
+          helpersClassNames.Counter
+        );
+        setClassHash(counterClassHash.classHash);
+        break;
+      }
     }
-    setClassHash(classHash);
     setStatus("SUCCEEDED");
   };
 

@@ -1,4 +1,4 @@
-import { useAuth } from "../helpers/authn";
+import { useAuth } from "../helpers/authn_context";
 import Navbar from "../components/navbar";
 import Markdown from "markdown-to-jsx";
 import { useEffect, useState } from "react";
@@ -33,7 +33,7 @@ const Login = () => {
           setWarning(false);
         }, 3000);
       }
-    } catch (e) {
+    } catch {
       setWarning(true);
       setTimeout(() => {
         setWarning(false);

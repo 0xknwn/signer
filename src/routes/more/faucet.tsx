@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAccounts } from "../../helpers/accounts";
+import { useAccounts } from "../../helpers/account_context";
 import { Account, RpcProvider, Contract, cairo } from "starknet";
 import { ERC20ABI } from "@0xknwn/starknet-modular-account";
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
@@ -16,14 +16,6 @@ function Faucet() {
   const [refresh, setRefresh] = useState(0);
   const [status, setStatus] = useState("unknown");
 
-  const getTransactionStatus = async () => {
-    const provider = new RpcProvider({ nodeUrl: "http://localhost:5173/rpc" });
-    const { execution_status } = await provider.getTransactionStatus(
-      transactionHash
-    );
-    setStatus(execution_status?.toString() || "unknown");
-  };
-
   useEffect(() => {
     if (transactionHash === "0x0" || refresh === 0) {
       return;
@@ -35,13 +27,23 @@ function Faucet() {
   }, [refresh, transactionHash]);
 
   useEffect(() => {
-    if (refresh % 15 === 2) {
-      if (transactionHash === "0x0") {
-        return;
-      }
-      getTransactionStatus();
+    if (transactionHash === "0x0") {
+      return;
     }
-  }, [refresh]);
+    if (refresh % 15 !== 2) {
+      return;
+    }
+    const getTransactionStatus = async () => {
+      const provider = new RpcProvider({
+        nodeUrl: "http://localhost:5173/rpc",
+      });
+      const { execution_status } = await provider.getTransactionStatus(
+        transactionHash
+      );
+      setStatus(execution_status?.toString() || "unknown");
+    };
+    getTransactionStatus();
+  }, [refresh, transactionHash]);
 
   useEffect(() => {
     if (status === "SUCCEEDED") {
