@@ -6,7 +6,7 @@ import { http, HttpResponse } from "msw";
 
 export const restHandlers = [
   http.get(
-    "http://localhost:3000/version",
+    "http://localhost:3000/api/version",
     () => {
       return HttpResponse.json({ version: "mock" });
     },
