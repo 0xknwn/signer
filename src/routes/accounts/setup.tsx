@@ -1,4 +1,4 @@
-import { useAccounts, type account } from "../../helpers/accounts";
+import { useAccounts, type account } from "../../helpers/account_context";
 import AccountComponent from "../../components/account";
 import { useEffect, useState } from "react";
 import { RpcProvider, Signer, CallData } from "starknet";
@@ -10,7 +10,7 @@ import {
   SmartrAccountABI,
   classNames,
 } from "@0xknwn/starknet-modular-account";
-import { useAuth } from "../../helpers/authn";
+import { useAuth } from "../../helpers/authn_context";
 import { getKeys } from "../../helpers/encryption";
 
 function Setup() {
@@ -71,7 +71,7 @@ function Setup() {
       );
       console.log("address", address);
       setDeployedStatus("deployed");
-    } catch (e) {
+    } catch {
       setDeployedStatus("undeployed");
     }
   };
@@ -82,7 +82,7 @@ function Setup() {
       try {
         await provider.getClassHashAt(accounts[selectedAccountNumber].address);
         setDeployedStatus("deployed");
-      } catch (e) {
+      } catch {
         setDeployedStatus("undeployed");
       }
     };

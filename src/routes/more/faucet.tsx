@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAccounts } from "../../helpers/accounts";
+import { useAccounts } from "../../helpers/account_context";
 import { Account, RpcProvider, Contract, cairo } from "starknet";
 import { ERC20ABI } from "@0xknwn/starknet-modular-account";
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon";

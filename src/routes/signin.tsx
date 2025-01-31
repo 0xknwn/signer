@@ -1,5 +1,5 @@
 import NavBar from "../components/navbar";
-import { useAuth } from "../helpers/authn";
+import { useAuth } from "../helpers/authn_context";
 import { derive, encrypt } from "../helpers/encryption";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";

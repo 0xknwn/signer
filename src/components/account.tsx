@@ -1,4 +1,4 @@
-import { useAccounts } from "../helpers/accounts";
+import { useAccounts } from "../helpers/account_context";
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
 
 const Account = () => {

@@ -1,6 +1,6 @@
 import { useLocation, NavLink } from "react-router";
 import "./navbar.css";
-import { useAuth } from "../helpers/authn";
+import { useAuth } from "../helpers/authn_context";
 
 function Navbar() {
   const location = useLocation();

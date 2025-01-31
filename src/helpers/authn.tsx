@@ -1,32 +1,9 @@
-import { useContext, createContext } from "react";
 import { useLocation, useNavigate, Navigate } from "react-router";
 import { useState, useEffect } from "react";
 import { decrypt, encrypt } from "./encryption";
 import { store } from "./store";
 
-export const AuthContext = createContext<{
-  challenge: string;
-  verifier: string;
-  cipher: CryptoKey | null;
-  passphrase: string;
-  setPassphrase: (value: string) => void;
-  setVerifier: (value: string) => void;
-  verify: (key: CryptoKey | null) => Promise<boolean>;
-  resetWallet: () => void;
-}>({
-  challenge: "",
-  verifier: "",
-  cipher: null,
-  passphrase: "",
-  setPassphrase: () => {},
-  setVerifier: () => {},
-  verify: async () => false,
-  resetWallet: () => {},
-});
-
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+import { AuthContext, useAuth } from "./authn_context";
 
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -61,7 +38,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       let output = "";
       try {
         output = await decrypt(key, verifier);
-      } catch (e) {
+      } catch {
         setCipher(null);
         return false;
       }

@@ -1,4 +1,4 @@
-import { useAccounts } from "../../helpers/accounts";
+import { useAccounts } from "../../helpers/account_context";
 import { useEffect, useState } from "react";
 import { RpcProvider } from "starknet";
 
@@ -33,7 +33,11 @@ const TransactionList = () => {
           <p>
             transaction #{index}: {transaction}
           </p>
-          <Transaction transaction={transaction} refresh={refresh} />
+          <Transaction
+            key={index}
+            transaction={transaction}
+            refresh={refresh}
+          />
         </>
       ))}
     </>

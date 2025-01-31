@@ -3,9 +3,9 @@ import Markdown from "markdown-to-jsx";
 import { useEffect, useState } from "react";
 import { RpcProvider, shortString, Call, CallData } from "starknet";
 import { content } from "./transactions.help";
-import { ChainId } from "@starknet-io/types-js";
-import { useAccounts } from "../helpers/accounts";
-import { useAuth } from "../helpers/authn";
+// import { ChainId } from "@starknet-io/types-js";
+import { useAccounts } from "../helpers/account_context";
+import { useAuth } from "../helpers/authn_context";
 import { getKeys } from "../helpers/encryption";
 import {
   accountAddress,
@@ -15,15 +15,16 @@ import {
   classNames,
 } from "@0xknwn/starknet-modular-account";
 import { store } from "../helpers/store";
-import { addStoredNotification } from "./notifier";
+import { addStoredNotification } from "../helpers/stored_notification";
+
 function Transactions() {
+  const providerURL = "http://localhost:5173/rpc";
+  const provider = new RpcProvider({ nodeUrl: providerURL });
   const [help, setHelp] = useState(false);
   const [feeEstimate, setFeeEstimate] = useState(0n);
   const { selectedAccountNumber, accounts } = useAccounts();
   const { passphrase } = useAuth();
   const [currentTransaction, setCurrentTransaction] = useState("0x0");
-  const providerURL = "http://localhost:5173/rpc";
-  const provider = new RpcProvider({ nodeUrl: providerURL });
   const [refresh, setRefresh] = useState(0);
   const [currentTransactionStatus, setCurrentTransactionStatus] =
     useState("unknown");
@@ -33,18 +34,10 @@ function Transactions() {
 
   useEffect(() => {
     (async () => {
-      const chain = await getChainId();
+      const chain = (await provider.getChainId()).toString();
       setChainId(shortString.decodeShortString(chain));
     })();
   }, []);
-
-  const getTransactionStatus = async () => {
-    const provider = new RpcProvider({ nodeUrl: "http://localhost:5173/rpc" });
-    const { execution_status } = await provider.getTransactionStatus(
-      currentTransaction
-    );
-    setCurrentTransactionStatus(execution_status?.toString() || "unknown");
-  };
 
   useEffect(() => {
     if (currentTransaction === "0x0" || refresh === 0) {
@@ -61,14 +54,15 @@ function Transactions() {
       if (currentTransaction === "0x0") {
         return;
       }
-      getTransactionStatus();
+      const transactionStatus = async () => {
+        const { execution_status } = await provider.getTransactionStatus(
+          currentTransaction
+        );
+        setCurrentTransactionStatus(execution_status?.toString() || "unknown");
+      };
+      transactionStatus();
     }
-  }, [refresh]);
-
-  const getChainId = async () => {
-    const chainId = (await provider.getChainId()) as ChainId;
-    return chainId.toString();
-  };
+  }, [refresh, currentTransaction]);
 
   const sanitize = async () => {
     const sanitizedCalls = [] as Call[];
@@ -195,6 +189,11 @@ function Transactions() {
       setCurrentTransaction("0x0");
       setRefresh(0);
     }
+  };
+
+  const getChainId = async () => {
+    const chain = (await provider.getChainId()).toString();
+    setChainId(shortString.decodeShortString(chain));
   };
 
   return (

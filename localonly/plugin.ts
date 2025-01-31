@@ -2,8 +2,8 @@ import { Plugin, Connect } from "vite";
 import { Buffer } from "buffer";
 
 async function streamToString(stream: ReadableStream): Promise<string> {
-  const chunks: Array<any> = [];
-  for await (let chunk of stream) {
+  const chunks: Uint8Array<ArrayBufferLike>[] = [];
+  for await (const chunk of stream) {
     chunks.push(chunk);
   }
   const buffer = Buffer.concat(chunks);
@@ -12,7 +12,7 @@ async function streamToString(stream: ReadableStream): Promise<string> {
 
 import apis from "./apis";
 import rpc from "./rpc";
-import { starknetRequest } from "./rpc";
+import { request } from "./rpc";
 
 const API = (): Plugin => {
   return {
@@ -23,7 +23,7 @@ const API = (): Plugin => {
         server.middlewares.use(
           async (
             req: Connect.IncomingMessage & {
-              on: (event: string, fn: (chunk: any) => void) => void;
+              on: (event: string, fn: () => void) => void;
             },
             res,
             next
@@ -55,7 +55,7 @@ const API = (): Plugin => {
                   body += chunk;
                 });
                 req.on("end", async () => {
-                  const request = JSON.parse(body) as starknetRequest;
+                  const request = JSON.parse(body) as request;
                   const response = await rpc(request);
                   console.log(
                     "[API]:",
