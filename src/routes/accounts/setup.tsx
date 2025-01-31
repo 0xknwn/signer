@@ -21,7 +21,13 @@ function Setup() {
     addAccount,
     selectedAccountNumber,
     setSelectedAccountNumber,
+    tokens,
   } = useAccounts();
+
+  const position = (name: string) => {
+    return tokens.find((t) => t.name === name) || { value: 0n };
+  };
+
   const { passphrase } = useAuth();
   const providerURL = "http://localhost:5173/rpc";
 
@@ -118,13 +124,18 @@ function Setup() {
         <p>Account is deployed</p>
       ) : deployedStatus === "undeployed" ? (
         <>
-          <button onClick={runDeployAccount}>Deploy Account </button>
+          {BigInt(position("STRK")?.value) < 100000000000000n ? (
+            "fund the account with STRK!"
+          ) : (
+            <button onClick={runDeployAccount}>Deploy Account </button>
+          )}
         </>
       ) : deployedStatus === "unknown" ? (
         <p>Checking account deployment status...</p>
       ) : (
         <p>Account is being deployed, please wait...</p>
       )}
+      <p>STRK: {position("STRK")?.value}</p>
     </>
   );
 }

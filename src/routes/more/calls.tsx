@@ -79,10 +79,14 @@ function Calls({ name: className }: Props) {
       const provider = new RpcProvider({
         nodeUrl: "http://localhost:5173/rpc",
       });
-      const hash = await provider.getClassHashAt(contractAddress);
-      if (hash === classHash) {
-        setIsDeployed(true);
-      } else {
+      try {
+        const hash = await provider.getClassHashAt(contractAddress);
+        if (hash === classHash) {
+          setIsDeployed(true);
+        } else {
+          setIsDeployed(false);
+        }
+      } catch (e) {
         setIsDeployed(false);
       }
     };
