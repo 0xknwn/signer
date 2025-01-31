@@ -5,6 +5,9 @@ import { geolocation } from "@vercel/edge";
 export const edge = true;
 
 export default function handler(req: Request) {
-  const { city } = geolocation(req);
+  let { city } = geolocation(req);
+  if (!city) {
+    city = "San Francisco";
+  }
   return new Response(`{"version": "dev", "city": "${city}"}`);
 }
