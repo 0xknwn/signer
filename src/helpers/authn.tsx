@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { decrypt, encrypt } from "./encryption";
 import { store } from "./store";
 
-import { AuthContext, useAuth } from "./authn_context";
+import { AuthContext, useAuthn } from "./authn_context";
 
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -106,7 +106,7 @@ type ProtectedRouteProps = {
 };
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { cipher, verifier, passphrase } = useAuth();
+  const { cipher, verifier, passphrase } = useAuthn();
   const location = useLocation();
   if ((!verifier || verifier === "") && location.pathname !== "/") {
     return <Navigate to="/" replace state={{ from: location }} />;

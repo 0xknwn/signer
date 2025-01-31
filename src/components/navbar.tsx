@@ -1,10 +1,10 @@
 import { useLocation, NavLink } from "react-router";
 import "./navbar.css";
-import { useAuth } from "../helpers/authn_context";
+import { useAuthn } from "../helpers/authn_context";
 
 function Navbar() {
   const location = useLocation();
-  const { verifier, resetWallet, verify, cipher, passphrase } = useAuth();
+  const { verifier, resetWallet, verify, cipher, passphrase } = useAuthn();
   const logout = async () => {
     await verify(null);
   };

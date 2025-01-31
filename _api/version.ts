@@ -11,9 +11,10 @@ export const streaming = true;
 //   expiration: 30,
 // };
 
-export default async function handler() {
+export default async function handler(req: Request) {
   // const res = await fetch(`${process.env.BACKEND_URL}/version`);
-  const res = { json: async () => ({ version: "dev" }) };
+  const { url } = req;
+  const res = { json: async () => ({ version: "dev", url }) };
   const out = await res.json();
 
   const response = new Response(JSON.stringify({ version: out.version }), {

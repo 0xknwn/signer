@@ -10,7 +10,7 @@ import {
   SmartrAccountABI,
   classNames,
 } from "@0xknwn/starknet-modular-account";
-import { useAuth } from "../../helpers/authn_context";
+import { useAuthn } from "../../helpers/authn_context";
 import { getKeys } from "../../helpers/encryption";
 
 function Setup() {
@@ -28,7 +28,7 @@ function Setup() {
     return tokens.find((t) => t.name === name) || { value: 0n };
   };
 
-  const { passphrase } = useAuth();
+  const { passphrase } = useAuthn();
   const providerURL = "http://localhost:5173/rpc";
 
   const runDeployAccount = async () => {

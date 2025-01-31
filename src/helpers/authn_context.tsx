@@ -20,6 +20,6 @@ export const AuthContext = createContext<{
   resetWallet: () => {},
 });
 
-export const useAuth = () => {
+export const useAuthn = () => {
   return useContext(AuthContext);
 };

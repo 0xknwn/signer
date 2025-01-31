@@ -9,4 +9,12 @@ export default defineConfig({
   test: {
     environment: "jsdom",
   },
+  server: {
+    proxy: {
+      "/rpc": {
+        target: "http://localhost:5050",
+        changeOrigin: true,
+      },
+    },
+  },
 });

@@ -17,101 +17,44 @@ import Contracts from "./routes/more/contracts.tsx";
 import Calls from "./routes/more/calls.tsx";
 import { AccountsProvider } from "./helpers/accounts.tsx";
 import { classNames as helpersClassNames } from "@0xknwn/starknet-test-helpers";
+import { PollingProvider } from "./helpers/polling.tsx";
 
 export const App = () => {
   return (
     <AuthProvider>
-      <AccountsProvider>
-        <Routes>
-          <Route index element={<Signin />} />
-          <Route
-            path="login"
-            element={
-              <ProtectedRoute>
-                <Login />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="seed"
-            element={
-              <ProtectedRoute>
-                <Seed />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="*"
-            element={
-              <ProtectedRoute>
-                <NoMatch />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="accounts"
-            element={
-              <ProtectedRoute>
-                <Accounts />
-              </ProtectedRoute>
-            }
-          >
+      <PollingProvider>
+        <AccountsProvider>
+          <Routes>
+            <Route index element={<Signin />} />
             <Route
-              index
+              path="login"
               element={
                 <ProtectedRoute>
-                  <Setup />
+                  <Login />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="setup"
+              path="seed"
               element={
                 <ProtectedRoute>
-                  <Setup />
+                  <Seed />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="tokens"
+              path="*"
               element={
                 <ProtectedRoute>
-                  <Tokens />
+                  <NoMatch />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="history"
+              path="accounts"
               element={
                 <ProtectedRoute>
-                  <History />
-                </ProtectedRoute>
-              }
-            />{" "}
-            <Route path="*" element={<NoMatch />} />
-          </Route>
-          <Route
-            path="transactions"
-            element={
-              <ProtectedRoute>
-                <Transactions />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="notifier"
-            element={
-              <ProtectedRoute>
-                <Notifier />
-              </ProtectedRoute>
-            }
-          />
-          {import.meta.env.MODE === "development" && (
-            <Route
-              path="more"
-              element={
-                <ProtectedRoute>
-                  <More />
+                  <Accounts />
                 </ProtectedRoute>
               }
             >
@@ -119,47 +62,107 @@ export const App = () => {
                 index
                 element={
                   <ProtectedRoute>
-                    <Faucet />
+                    <Setup />
                   </ProtectedRoute>
                 }
               />
               <Route
-                path="faucet"
+                path="setup"
                 element={
                   <ProtectedRoute>
-                    <Faucet />
+                    <Setup />
                   </ProtectedRoute>
                 }
               />
               <Route
-                path="classes"
+                path="tokens"
                 element={
                   <ProtectedRoute>
-                    <Classes />
+                    <Tokens />
                   </ProtectedRoute>
                 }
               />
               <Route
-                path="contracts"
+                path="history"
                 element={
                   <ProtectedRoute>
-                    <Contracts />
+                    <History />
                   </ProtectedRoute>
                 }
-              />
-              <Route
-                path="calls"
-                element={
-                  <ProtectedRoute>
-                    <Calls name={helpersClassNames.Counter} />
-                  </ProtectedRoute>
-                }
-              />
+              />{" "}
               <Route path="*" element={<NoMatch />} />
             </Route>
-          )}
-        </Routes>
-      </AccountsProvider>
+            <Route
+              path="transactions"
+              element={
+                <ProtectedRoute>
+                  <Transactions />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="notifier"
+              element={
+                <ProtectedRoute>
+                  <Notifier />
+                </ProtectedRoute>
+              }
+            />
+            {import.meta.env.MODE === "development" && (
+              <Route
+                path="more"
+                element={
+                  <ProtectedRoute>
+                    <More />
+                  </ProtectedRoute>
+                }
+              >
+                <Route
+                  index
+                  element={
+                    <ProtectedRoute>
+                      <Faucet />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="faucet"
+                  element={
+                    <ProtectedRoute>
+                      <Faucet />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="classes"
+                  element={
+                    <ProtectedRoute>
+                      <Classes />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="contracts"
+                  element={
+                    <ProtectedRoute>
+                      <Contracts />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="calls"
+                  element={
+                    <ProtectedRoute>
+                      <Calls name={helpersClassNames.Counter} />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="*" element={<NoMatch />} />
+              </Route>
+            )}
+          </Routes>
+        </AccountsProvider>
+      </PollingProvider>
     </AuthProvider>
   );
 };

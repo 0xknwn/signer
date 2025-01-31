@@ -10,7 +10,7 @@ import {
 } from "@0xknwn/starknet-modular-account";
 import { CallData } from "starknet";
 import { getKeys } from "./encryption";
-import { useAuth } from "./authn_context";
+import { useAuthn } from "./authn_context";
 
 import type { account, token } from "./account_context";
 import { AccountContext } from "./account_context";
@@ -24,7 +24,7 @@ export const AccountsProvider = ({ children }: AccountsProviderProps) => {
   const provider = new RpcProvider({ nodeUrl: providerURL });
   const [accounts, setAccounts] = useState([] as account[]);
   const [selectedAccountNumber, setSelectedAccountNumber] = useState(0);
-  const { passphrase } = useAuth();
+  const { passphrase } = useAuthn();
 
   const [tokens, setTokens] = useState([
     {

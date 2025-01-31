@@ -11,8 +11,8 @@ async function streamToString(stream: ReadableStream): Promise<string> {
 }
 
 import apis from "./apis";
-import rpc from "./rpc";
-import { request } from "./rpc";
+
+// import { startServer, stopServer } from "./mockserver";
 
 const API = (): Plugin => {
   return {
@@ -47,32 +47,6 @@ const API = (): Plugin => {
                 }
                 return;
               }
-            }
-            if (req.originalUrl === `/rpc`) {
-              let body = "";
-              if (req.on) {
-                req.on("data", (chunk) => {
-                  body += chunk;
-                });
-                req.on("end", async () => {
-                  const request = JSON.parse(body) as request;
-                  const response = await rpc(request);
-                  console.log(
-                    "[API]:",
-                    req.originalUrl,
-                    body,
-                    "=>",
-                    JSON.stringify(response)
-                  );
-                  res.writeHead(200, {
-                    "Content-Type": "application/json",
-                    "Cache-Control": "no-cache",
-                  });
-                  res.write(JSON.stringify(response));
-                  res.end();
-                });
-              }
-              return;
             }
             return next();
           }
