@@ -5,6 +5,7 @@ import { ERC20ABI } from "@0xknwn/starknet-modular-account";
 import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
 
 function Faucet() {
+  const { refreshTokens } = useAccounts();
   const seed0z = {
     address: import.meta.env.VITE_OZ_ACCOUNT_ADDRESS,
     privateKey: import.meta.env.VITE_OZ_PRIVATE_KEY,
@@ -45,6 +46,7 @@ function Faucet() {
   useEffect(() => {
     if (status === "SUCCEEDED") {
       setRefresh(0);
+      refreshTokens();
     }
   }, [status]);
 

@@ -48,12 +48,16 @@ function Declare({ className }: Props) {
       const provider = new RpcProvider({
         nodeUrl: "http://localhost:5173/rpc",
       });
-      const d = await provider.getClassByHash(classHash);
-      if (d) {
-        setIsDeclared("true");
-        return;
+      try {
+        const d = await provider.getClassByHash(classHash);
+        if (d) {
+          setIsDeclared("true");
+          return;
+        }
+        setIsDeclared("false");
+      } catch (e) {
+        setIsDeclared("false");
       }
-      setIsDeclared("false");
     };
     fetchDeclaredStatus();
   }, [classHash]);
