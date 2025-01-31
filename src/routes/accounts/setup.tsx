@@ -80,10 +80,7 @@ function Setup() {
     const provider = new RpcProvider({ nodeUrl: providerURL });
     const checkDeployed = async () => {
       try {
-        const deployed = await provider.getClassHashAt(
-          accounts[selectedAccountNumber].address
-        );
-        console.log("Deployed: ", deployed);
+        await provider.getClassHashAt(accounts[selectedAccountNumber].address);
         setDeployedStatus("deployed");
       } catch (e) {
         setDeployedStatus("undeployed");
