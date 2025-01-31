@@ -1,9 +1,8 @@
-
 export const store = {
-    challenge: "smartr-challenge",
-    verifier: "smartr-verifier",
-    mnemonic: "smartr-mnemonic",
-    accounts: "smartr-accounts",
-    username: "smartr-username",
-  };
-  
+  challenge: "smartr-challenge",
+  verifier: "smartr-verifier",
+  mnemonic: "smartr-mnemonic",
+  accounts: "smartr-accounts",
+  username: "smartr-username",
+  notifier: "smartr-notifier",
+};
