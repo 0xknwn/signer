@@ -68,11 +68,11 @@ function Deploy({ className }: Props) {
 
   useEffect(() => {
     const fetchDeclaredStatus = async () => {
+      if (classHash === "0x0") return;
       const provider = new RpcProvider({
         nodeUrl: "http://localhost:5173/rpc",
       });
-      const d = await provider.getClassByHash(classHash);
-      console.log(d);
+      await provider.getClassByHash(classHash);
       setIsDeclared(true);
     };
     fetchDeclaredStatus();

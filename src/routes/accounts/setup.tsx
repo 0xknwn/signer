@@ -38,11 +38,8 @@ function Setup() {
       passphrase,
       selectedAccountNumber
     );
-    console.log("publicKey", publicKey);
-    console.log("privateKey", privateKey);
     const smartrSigner = new Signer(privateKey);
     const smartrAccountPublicKey = await smartrSigner.getPubKey();
-    console.log("smartrAccountPublicKey", smartrAccountPublicKey);
     const starkValidatorClassHash = classHash(classNames.StarkValidator);
     const calldata = new CallData(SmartrAccountABI).compile("constructor", {
       core_validator: starkValidatorClassHash,
@@ -53,7 +50,6 @@ function Setup() {
       smartrAccountPublicKey,
       calldata
     );
-    console.log("smartrAccountAddress", smartrAccountAddress);
     const smartrAccount = new SmartrAccount(
       provider,
       smartrAccountAddress,
@@ -63,13 +59,12 @@ function Setup() {
       "0x3"
     );
     try {
-      const address = await deployAccount(
+      await deployAccount(
         smartrAccount,
         classNames.SmartrAccount,
         publicKey,
         calldata
       );
-      console.log("address", address);
       setDeployedStatus("deployed");
     } catch {
       setDeployedStatus("undeployed");
