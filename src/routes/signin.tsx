@@ -1,5 +1,5 @@
 import NavBar from "../components/navbar";
-import { useAuth } from "../helpers/authn_context";
+import { useAuthn } from "../helpers/authn_context";
 import { derive, encrypt } from "../helpers/encryption";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
@@ -9,7 +9,7 @@ import { useState } from "react";
 import { content } from "./signin.help";
 
 function Signin() {
-  const { challenge, verifier, setVerifier } = useAuth();
+  const { challenge, verifier, setVerifier } = useAuthn();
   const navigate = useNavigate();
   const location = useLocation();
 

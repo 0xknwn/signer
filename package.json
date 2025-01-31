@@ -3,7 +3,11 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
+    "api": "tsx watch --clear-screen=false ./localonly/server.ts",
     "dev": "vite --config vite.local.ts",
     "build": "tsc -b && vite build",
     "doc": "tsx ./scripts/doc.ts",
@@ -28,11 +32,14 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/react": "19.0.7",
     "@types/react-dom": "19.0.3",
+    "@vercel/edge": "^1.2.1",
+    "@vercel/node": "^5.0.5",
     "@vitejs/plugin-react": "^4.3.4",
     "buffer": "^6.0.3",
     "eslint": "^9.17.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
+    "express": "^4.21.2",
     "globals": "^15.14.0",
     "jsdom": "^26.0.0",
     "markdown-to-jsx": "^7.7.3",

@@ -3,12 +3,12 @@ import Markdown from "markdown-to-jsx";
 import { useEffect, useState } from "react";
 
 import { content } from "./seed.help";
-import { useAuth } from "../helpers/authn_context";
+import { useAuthn } from "../helpers/authn_context";
 import { wordlist } from "@scure/bip39/wordlists/english";
 import { validateMnemonic, generateMnemonic } from "@scure/bip39";
 
 const Seed = () => {
-  const { passphrase, setPassphrase } = useAuth();
+  const { passphrase, setPassphrase } = useAuthn();
   const [help, setHelp] = useState(false);
   const [valid, setValid] = useState(false);
   const [readOnly, setReadOnly] = useState(true);

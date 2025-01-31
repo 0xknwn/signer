@@ -5,7 +5,7 @@ import { RpcProvider, shortString, Call, CallData } from "starknet";
 import { content } from "./transactions.help";
 // import { ChainId } from "@starknet-io/types-js";
 import { useAccounts } from "../helpers/account_context";
-import { useAuth } from "../helpers/authn_context";
+import { useAuthn } from "../helpers/authn_context";
 import { getKeys } from "../helpers/encryption";
 import {
   accountAddress,
@@ -23,7 +23,7 @@ function Transactions() {
   const [help, setHelp] = useState(false);
   const [feeEstimate, setFeeEstimate] = useState(0n);
   const { selectedAccountNumber, accounts } = useAccounts();
-  const { passphrase } = useAuth();
+  const { passphrase } = useAuthn();
   const [currentTransaction, setCurrentTransaction] = useState("0x0");
   const [refresh, setRefresh] = useState(0);
   const [currentTransactionStatus, setCurrentTransactionStatus] =

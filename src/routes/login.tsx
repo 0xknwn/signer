@@ -1,4 +1,4 @@
-import { useAuth } from "../helpers/authn_context";
+import { useAuthn } from "../helpers/authn_context";
 import Navbar from "../components/navbar";
 import Markdown from "markdown-to-jsx";
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import Version from "../components/version";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { cipher, verify } = useAuth();
+  const { cipher, verify } = useAuthn();
 
   const [warning, setWarning] = useState(false);
   const [help, setHelp] = useState(false);
