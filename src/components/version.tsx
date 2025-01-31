@@ -5,7 +5,7 @@ const Login = () => {
 
   useEffect(() => {
     const getVersion = async () => {
-      const v = await fetch(`/version`);
+      const v = await fetch(`/api/version`);
       const data = await v.json();
       setVersion(data?.version);
     };
