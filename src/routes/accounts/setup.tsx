@@ -1,12 +1,90 @@
 import { useAccounts, type account } from "../../helpers/accounts";
-import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
+import AccountComponent from "../../components/account";
+import { useEffect, useState } from "react";
+import { RpcProvider, Signer, CallData } from "starknet";
+import {
+  accountAddress,
+  classHash,
+  deployAccount,
+  SmartrAccount,
+  SmartrAccountABI,
+  classNames,
+} from "@0xknwn/starknet-modular-account";
+import { useAuth } from "../../helpers/authn";
+import { getKeys } from "../../helpers/encryption";
+
 function Setup() {
+  const [deployedStatus, setDeployedStatus] = useState("unknown");
+
   const {
     accounts,
     addAccount,
     selectedAccountNumber,
     setSelectedAccountNumber,
   } = useAccounts();
+  const { passphrase } = useAuth();
+  const providerURL = "http://localhost:5173/rpc";
+
+  const runDeployAccount = async () => {
+    setDeployedStatus("deploying");
+    const provider = new RpcProvider({ nodeUrl: providerURL });
+    const { publicKey, privateKey } = await getKeys(
+      passphrase,
+      selectedAccountNumber
+    );
+    console.log("publicKey", publicKey);
+    console.log("privateKey", privateKey);
+    const smartrSigner = new Signer(privateKey);
+    const smartrAccountPublicKey = await smartrSigner.getPubKey();
+    console.log("smartrAccountPublicKey", smartrAccountPublicKey);
+    const starkValidatorClassHash = classHash(classNames.StarkValidator);
+    const calldata = new CallData(SmartrAccountABI).compile("constructor", {
+      core_validator: starkValidatorClassHash,
+      args: [smartrAccountPublicKey],
+    });
+    const smartrAccountAddress = accountAddress(
+      classNames.SmartrAccount,
+      smartrAccountPublicKey,
+      calldata
+    );
+    console.log("smartrAccountAddress", smartrAccountAddress);
+    const smartrAccount = new SmartrAccount(
+      provider,
+      smartrAccountAddress,
+      privateKey,
+      undefined,
+      "1",
+      "0x3"
+    );
+    try {
+      const address = await deployAccount(
+        smartrAccount,
+        classNames.SmartrAccount,
+        publicKey,
+        calldata
+      );
+      console.log("address", address);
+      setDeployedStatus("deployed");
+    } catch (e) {
+      setDeployedStatus("undeployed");
+    }
+  };
+
+  useEffect(() => {
+    const provider = new RpcProvider({ nodeUrl: providerURL });
+    const checkDeployed = async () => {
+      try {
+        const deployed = await provider.getClassHashAt(
+          accounts[selectedAccountNumber].address
+        );
+        console.log("Deployed: ", deployed);
+        setDeployedStatus("deployed");
+      } catch (e) {
+        setDeployedStatus("undeployed");
+      }
+    };
+    checkDeployed();
+  }, [selectedAccountNumber, accounts]);
 
   const handleOnChange = (value: string) => {
     setSelectedAccountNumber(parseInt(value));
@@ -21,7 +99,7 @@ function Setup() {
   return (
     <>
       <button onClick={add}>Add account</button>
-      {accounts.length > 0 && selectedAccountNumber < accounts.length ? (
+      {accounts.length > 0 && selectedAccountNumber < accounts.length && (
         <>
           <select
             onChange={(e) => handleOnChange(e.currentTarget.value)}
@@ -33,53 +111,19 @@ function Setup() {
               </option>
             ))}
           </select>
-          <div>
-            <div>
-              Address:{" "}
-              <Jazzicon
-                diameter={32}
-                seed={jsNumberForAddress(
-                  accounts[selectedAccountNumber].address
-                )}
-              />{" "}
-              {accounts[selectedAccountNumber].address.substring(0, 6) +
-                "..." +
-                accounts[selectedAccountNumber].address.substring(
-                  accounts[selectedAccountNumber].address.length - 4,
-                  accounts[selectedAccountNumber].address.length
-                )}
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    accounts[selectedAccountNumber].address
-                  );
-                }}
-              >
-                Copy
-              </button>
-            </div>
-            <div>
-              Public key:{" "}
-              {accounts[selectedAccountNumber].publickey.substring(0, 6) +
-                "..." +
-                accounts[selectedAccountNumber].publickey.substring(
-                  accounts[selectedAccountNumber].publickey.length - 4,
-                  accounts[selectedAccountNumber].publickey.length
-                )}
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    accounts[selectedAccountNumber].publickey
-                  );
-                }}
-              >
-                Copy
-              </button>
-            </div>
-          </div>
         </>
+      )}
+      <AccountComponent />
+      {deployedStatus === "deployed" ? (
+        <p>Account is deployed</p>
+      ) : deployedStatus === "undeployed" ? (
+        <>
+          <button onClick={runDeployAccount}>Deploy Account </button>
+        </>
+      ) : deployedStatus === "unknown" ? (
+        <p>Checking account deployment status...</p>
       ) : (
-        <p>No accounts</p>
+        <p>Account is being deployed, please wait...</p>
       )}
     </>
   );
