@@ -35,7 +35,7 @@ function Transactions() {
   const { triggerRefresh } = usePolling();
 
   const [chainId, setChainId] = useState("");
-  const [calls, setCalls] = useState("[]");
+  const { calls, setCalls } = usePolling();
 
   useEffect(() => {
     (async () => {
@@ -66,41 +66,13 @@ function Transactions() {
           currentTransaction
         );
         setCurrentTransactionStatus(execution_status?.toString() || "unknown");
+        setCalls([]);
       };
       transactionStatus();
     }
   }, [refresh, currentTransaction]);
 
-  const sanitize = async () => {
-    const sanitizedCalls = [] as Call[];
-    const parsedCalls = JSON.parse(calls);
-    if (Array.isArray(parsedCalls)) {
-      for (const call of parsedCalls) {
-        if (
-          Object.prototype.hasOwnProperty.call(call, "entrypoint") &&
-          Object.prototype.hasOwnProperty.call(call, "contractAddress") &&
-          Object.prototype.hasOwnProperty.call(call, "calldata") &&
-          Array.isArray(call.calldata)
-        ) {
-          const sanitizedCall = {
-            entrypoint: call.entrypoint,
-            contractAddress: call.contractAddress,
-            calldata: call.calldata,
-          } as Call;
-          sanitizedCalls.push(sanitizedCall);
-        } else {
-          return [] as Call[];
-        }
-      }
-    }
-    return sanitizedCalls;
-  };
-
   const estimateFee = async () => {
-    const sanitizedCalls = await sanitize();
-    if (sanitizedCalls.length === 0) {
-      return;
-    }
     const provider = new RpcProvider({ nodeUrl: providerURL });
     const { publicKey, privateKey } = await getKeys(
       passphrase,
@@ -125,7 +97,7 @@ function Transactions() {
       "0x3"
     );
     try {
-      const fee = await smartrAccount.estimateFee(sanitizedCalls);
+      const fee = await smartrAccount.estimateFee(calls);
       if (fee.unit === "FRI") {
         setFeeEstimate(fee.suggestedMaxFee);
       }
@@ -150,10 +122,6 @@ function Transactions() {
   };
 
   const execute = async () => {
-    const sanitizedCalls = await sanitize();
-    if (sanitizedCalls.length === 0) {
-      return;
-    }
     const provider = new RpcProvider({ nodeUrl: providerURL });
     const { publicKey, privateKey } = await getKeys(
       passphrase,
@@ -178,7 +146,7 @@ function Transactions() {
       "0x3"
     );
     try {
-      const { transaction_hash } = await smartrAccount.execute(sanitizedCalls);
+      const { transaction_hash } = await smartrAccount.execute(calls);
       setCurrentTransaction(transaction_hash);
       setCurrentTransactionStatus("RUNNING");
       const transactionNumber = numberOfSavedTransactions();
@@ -223,12 +191,13 @@ function Transactions() {
           <button onClick={getChainId}>Get chain id</button>
           <p>Chain id: {chainId}</p>
           <textarea
-            value={calls}
-            onChange={(e) => {
-              setCalls(e.target.value);
-            }}
+            value={JSON.stringify(calls, null, 2)}
             id="transaction"
+            readOnly
+            cols={50}
+            rows={20}
           />
+          <button onClick={() => setCalls([] as Call[])}>Reset</button>
           <button onClick={estimateFee}>Estimate Fees</button>
           <p>Fee estimate: {feeEstimate}</p>
           <button onClick={execute}>Execute Transaction</button>

@@ -3,6 +3,7 @@ import { PollingContext } from "./polling_context";
 import { useLocation } from "react-router";
 import { store } from "./store";
 import Poller from "./poller";
+import { Call } from "starknet";
 
 const pollNotifications = () => {
   const data = localStorage.getItem(store.notifier);
@@ -19,12 +20,16 @@ export const PollingProvider = ({ children }: PollingProviderProps) => {
   const location = useLocation();
   const [manualRefresh, setManualRefresh] = useState(0);
   const [notifications, setNotifications] = useState(0);
+  const [calls, setCalls] = useState([] as Call[]);
+
   const value = {
     triggerRefresh: () => {
       setManualRefresh(manualRefresh + 1);
     },
     refresh: manualRefresh,
     notifications,
+    calls,
+    setCalls,
   };
 
   useEffect(() => {

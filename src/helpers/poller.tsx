@@ -35,11 +35,10 @@ const Poller = ({ pathname, setRefresh }: PollerProps) => {
       ) {
         return;
       }
-      const c = JSON.parse(data.calls);
-      if (!Array.isArray(c)) {
+      if (!Array.isArray(data.calls)) {
         return;
       }
-      for (const call of c) {
+      for (const call of data.calls) {
         if (
           !call?.contractAddress ||
           !call?.entrypoint ||

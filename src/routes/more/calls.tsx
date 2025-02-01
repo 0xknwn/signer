@@ -5,7 +5,11 @@ import {
   classNames as helpersClassNames,
   CounterABI,
 } from "@0xknwn/starknet-test-helpers";
-
+import { usePolling } from "../../helpers/polling_context";
+import {
+  notificationT,
+  addStoredNotification,
+} from "../../helpers/stored_notification";
 type Props = {
   name: helpersClassNames;
 };
@@ -28,13 +32,13 @@ const computeContractAddress = async (
   );
 };
 
-function Calls({ name: className }: Props) {
+const Calls = ({ name: className }: Props) => {
   const seed0z = {
     address: import.meta.env.VITE_OZ_ACCOUNT_ADDRESS,
     privateKey: import.meta.env.VITE_OZ_PRIVATE_KEY,
     publicKey: import.meta.env.VITE_OZ_PUBLIC_KEY,
   };
-
+  const { triggerRefresh } = usePolling();
   const [classHash, setClassHash] = useState("0x0");
   const [contractAddress, setContractAddress] = useState("0x0");
   const [isDeployed, setIsDeployed] = useState(false);
@@ -93,12 +97,32 @@ function Calls({ name: className }: Props) {
     fetchDeploymentStatus();
   }, [contractAddress]);
 
+  const sendTransaction = async (call: string) => {
+    const calls = JSON.parse(call);
+    const notif = {
+      type: notificationT.REQUEST as notificationT.REQUEST,
+      calls: calls,
+      domain: "localhost:3000",
+      application: "0x0",
+    };
+    addStoredNotification(notif);
+    triggerRefresh();
+  };
+
   return (
     <>
       <h3>{className}</h3>
       {isDeployed ? (
         <>
-          {call}
+          <textarea value={call} id="calls" readOnly cols={50} rows={20} />
+          <button
+            onClick={() => {
+              sendTransaction(call);
+            }}
+          >
+            Load Transactions
+          </button>
+
           <button
             onClick={() => {
               navigator.clipboard.writeText(call);
@@ -112,6 +136,6 @@ function Calls({ name: className }: Props) {
       )}
     </>
   );
-}
+};
 
 export default Calls;
