@@ -23,7 +23,7 @@ const Account = ({ address }: AccountProps) => {
   );
 };
 
-type NotificationProps = {
+type NotificationOfExecutionProps = {
   transaction: string;
   account: string;
   status: string;
@@ -31,13 +31,13 @@ type NotificationProps = {
   cleaner: () => (i: number) => void;
 };
 
-const Notification = ({
+const NotificationOfExecution = ({
   transaction,
   account,
   status,
   index,
   cleaner,
-}: NotificationProps) => {
+}: NotificationOfExecutionProps) => {
   const clean = cleaner();
   const [monitoredStatus, setMonitoredStatus] = useState(status);
   useEffect(() => {
@@ -58,6 +58,7 @@ const Notification = ({
 
   return (
     <div id={index.toString()}>
+      <div>#{index.toString()}: Transaction</div>
       <div>
         <Account address={account} />
       </div>
@@ -68,4 +69,4 @@ const Notification = ({
   );
 };
 
-export default Notification;
+export default NotificationOfExecution;
