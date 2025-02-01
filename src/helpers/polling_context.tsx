@@ -1,9 +1,11 @@
 import { useContext, createContext } from "react";
 
 export const PollingContext = createContext<{
-  refresh: number;
+  triggerRefresh: () => void;
+  notifications: number;
 }>({
-  refresh: 0,
+  triggerRefresh: () => {},
+  notifications: 0,
 });
 
 export const usePolling = () => {

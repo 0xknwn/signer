@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { PollingContext } from "./polling_context";
 import { useLocation } from "react-router";
-
-type PollingProviderProps = {
-  children: React.ReactNode;
-};
+import { store } from "./store";
 
 const fetchMessage = async () => {
   if (import.meta.env.MODE !== "development") return;
@@ -14,11 +11,25 @@ const fetchMessage = async () => {
   return;
 };
 
+const pollNotifications = () => {
+  const data = localStorage.getItem(store.notifier);
+  if (!data) return 0;
+  const notifications = JSON.parse(data);
+  return notifications?.length || 0;
+};
+
+type PollingProviderProps = {
+  children: React.ReactNode;
+};
+
 export const PollingProvider = ({ children }: PollingProviderProps) => {
   const location = useLocation();
-  const [refresh, setRefresh] = useState(0);
+  const [autoRefresh, setAutoRefresh] = useState(0);
+  const [manualRefresh, setManualRefresh] = useState(0);
+  const [notifications, setNotifications] = useState(0);
   const value = {
-    refresh,
+    triggerRefresh: () => setManualRefresh(manualRefresh + 1),
+    notifications,
   };
 
   useEffect(() => {
@@ -30,16 +41,22 @@ export const PollingProvider = ({ children }: PollingProviderProps) => {
       return;
     }
     const interval = setInterval(() => {
-      setRefresh(refresh + 1);
+      setAutoRefresh(autoRefresh + 1);
     }, 1000);
     return () => clearInterval(interval);
-  }, [refresh, location]);
+  }, [autoRefresh, location]);
 
   useEffect(() => {
-    if (refresh % 10 === 2) {
+    if (autoRefresh % 10 === 2) {
       fetchMessage();
+      setNotifications(pollNotifications());
     }
-  }, [refresh]);
+  }, [autoRefresh]);
+
+  useEffect(() => {
+    fetchMessage();
+    setNotifications(pollNotifications());
+  }, [manualRefresh]);
 
   return (
     <PollingContext.Provider value={value}>{children}</PollingContext.Provider>

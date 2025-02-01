@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Notification from "../components/notification";
 
 import { store } from "../helpers/store";
-
+import { usePolling } from "../helpers/polling_context";
 import {
   notif,
   removeStoredNotification,
@@ -11,6 +11,7 @@ import {
 const NotificationList = () => {
   const [notifications, setNotifications] = useState([] as notif[]);
   const [refresh, setRefresh] = useState(0);
+  const { triggerRefresh } = usePolling();
 
   useEffect(() => {
     const storedNotification = localStorage.getItem(`${store.notifier}`);
@@ -22,6 +23,7 @@ const NotificationList = () => {
 
   const cleaner = () => (i: number) => {
     removeStoredNotification(i);
+    triggerRefresh();
     setRefresh(refresh + 1);
   };
 
