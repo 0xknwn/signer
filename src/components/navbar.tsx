@@ -1,9 +1,11 @@
 import { useLocation, NavLink } from "react-router";
 import "./navbar.css";
 import { useAuthn } from "../helpers/authn_context";
+import { usePolling } from "../helpers/polling_context";
 
 function Navbar() {
   const location = useLocation();
+  const { notifications } = usePolling();
   const { verifier, resetWallet, verify, cipher, passphrase } = useAuthn();
   const logout = async () => {
     await verify(null);
@@ -45,7 +47,12 @@ function Navbar() {
                     state={{ from: location }}
                     end
                   >
-                    Notifier
+                    <div className="notification">
+                      <span>Notifier</span>
+                      {notifications > 0 && (
+                        <span className="badge">{notifications}</span>
+                      )}
+                    </div>
                   </NavLink>
                   {import.meta.env.MODE === "development" && (
                     <NavLink

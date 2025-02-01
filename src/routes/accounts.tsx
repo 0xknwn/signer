@@ -3,11 +3,9 @@ import Markdown from "markdown-to-jsx";
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router";
 import { content } from "./accounts.help";
-import { usePolling } from "../helpers/polling_context";
 
 function Account() {
   const [help, setHelp] = useState(false);
-  const { refresh } = usePolling();
   return (
     <>
       <NavBar />
@@ -22,7 +20,6 @@ function Account() {
       {help ? (
         <>
           <Markdown>{content}</Markdown>
-          <div>{refresh}</div>
         </>
       ) : (
         <>

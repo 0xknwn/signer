@@ -16,6 +16,7 @@ import {
 } from "@0xknwn/starknet-modular-account";
 import { store } from "../helpers/store";
 import { addStoredNotification } from "../helpers/stored_notification";
+import { usePolling } from "../helpers/polling_context";
 
 function Transactions() {
   const providerURL = "http://localhost:5173/rpc";
@@ -28,6 +29,7 @@ function Transactions() {
   const [refresh, setRefresh] = useState(0);
   const [currentTransactionStatus, setCurrentTransactionStatus] =
     useState("unknown");
+  const { triggerRefresh } = usePolling();
 
   const [chainId, setChainId] = useState("");
   const [calls, setCalls] = useState("[]");
@@ -184,6 +186,7 @@ function Transactions() {
         transaction: transaction_hash,
         status: "RUNNING",
       });
+      triggerRefresh();
       setRefresh(1);
     } catch {
       setCurrentTransaction("0x0");
