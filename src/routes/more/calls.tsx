@@ -6,7 +6,6 @@ import {
   CounterABI,
 } from "@0xknwn/starknet-test-helpers";
 import { usePolling } from "../../helpers/polling_context";
-import { useNavigate } from "react-router";
 import {
   notificationT,
   addStoredNotification,
@@ -39,8 +38,7 @@ const Calls = ({ name: className }: Props) => {
     privateKey: import.meta.env.VITE_OZ_PRIVATE_KEY,
     publicKey: import.meta.env.VITE_OZ_PUBLIC_KEY,
   };
-  const navigate = useNavigate();
-  const { setCalls, triggerRefresh } = usePolling();
+  const { triggerRefresh } = usePolling();
   const [classHash, setClassHash] = useState("0x0");
   const [contractAddress, setContractAddress] = useState("0x0");
   const [isDeployed, setIsDeployed] = useState(false);
