@@ -1,7 +1,8 @@
-import { Call } from "starknet";
+import { useNavigate } from "react-router";
+import { usePolling } from "../helpers/polling_context";
 
 type NotificationOfRequestProps = {
-  calls: Call[];
+  calls: string;
   application: string;
   domain: string;
   index: number;
@@ -15,6 +16,8 @@ const NotificationOfRequest = ({
   index,
   cleaner,
 }: NotificationOfRequestProps) => {
+  const navigate = useNavigate();
+  const { setCalls } = usePolling();
   const clean = cleaner();
 
   return (
@@ -22,8 +25,17 @@ const NotificationOfRequest = ({
       <div>#{index.toString()}: Request</div>
       <div>application {application}</div>
       <div>domain {domain}</div>
-      <div>calls: {JSON.stringify(calls)}</div>
+      <textarea value={calls} id="calls" readOnly cols={50} rows={20} />
       <button onClick={() => clean(index)}>Acknowledge</button>
+      <button
+        onClick={() => {
+          setCalls(JSON.parse(calls));
+          clean(index);
+          navigate("/transactions");
+        }}
+      >
+        Go to Transactions
+      </button>
     </div>
   );
 };

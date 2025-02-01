@@ -53,7 +53,7 @@ const NotificationList = () => {
             <NotificationOfRequest
               key={index}
               index={index}
-              calls={notification.calls}
+              calls={JSON.stringify(notification.calls, null, 2)}
               application={notification.application}
               domain={notification.domain}
               cleaner={cleaner}
