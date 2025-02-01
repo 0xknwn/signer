@@ -15,7 +15,10 @@ import {
   classNames,
 } from "@0xknwn/starknet-modular-account";
 import { store } from "../helpers/store";
-import { addStoredNotification } from "../helpers/stored_notification";
+import {
+  addStoredNotification,
+  notificationT,
+} from "../helpers/stored_notification";
 import { usePolling } from "../helpers/polling_context";
 
 function Transactions() {
@@ -51,6 +54,8 @@ function Transactions() {
     return () => clearInterval(interval);
   }, [refresh, currentTransaction]);
 
+  // @todo: move the refresh in a subcomponent to avoid rebuilding the whole
+  // component tree every second while monitoring a transaction
   useEffect(() => {
     if (refresh % 10 === 2) {
       if (currentTransaction === "0x0") {
@@ -182,6 +187,7 @@ function Transactions() {
         transaction_hash
       );
       addStoredNotification({
+        type: notificationT.EXECUTION,
         account: accounts[selectedAccountNumber].address,
         transaction: transaction_hash,
         status: "RUNNING",

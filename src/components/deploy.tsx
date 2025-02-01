@@ -80,7 +80,6 @@ function Deploy({ className }: Props) {
 
   useEffect(() => {
     const fetchDeploymentStatus = async () => {
-      console.log("Checking deployment status...");
       if (contractAddress === "0x0") return;
       const provider = new RpcProvider({
         nodeUrl: "http://localhost:5173/rpc",

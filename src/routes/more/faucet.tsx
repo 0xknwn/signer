@@ -26,6 +26,8 @@ function Faucet() {
     return () => clearInterval(interval);
   }, [refresh, transactionHash]);
 
+  // @todo: move the refresh in a subcomponent to avoid rebuilding the whole
+  // component tree every second while monitoring a transaction
   useEffect(() => {
     if (transactionHash === "0x0") {
       return;
