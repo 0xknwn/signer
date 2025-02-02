@@ -1,4 +1,4 @@
-import Navbar from "../components/navbar.tsx";
+import Navbar from "../components/navbar";
 import Markdown from "markdown-to-jsx";
 import { useEffect, useState } from "react";
 

@@ -1,23 +1,23 @@
 import { Routes, Route } from "react-router";
-import Signin from "./routes/signin.tsx";
-import More from "./routes/more.tsx";
-import Accounts from "./routes/accounts.tsx";
-import Transactions from "./routes/transactions.tsx";
-import Notifier from "./routes/notifier.tsx";
-import { AuthProvider, ProtectedRoute } from "./helpers/authn.tsx";
-import Login from "./routes/login.tsx";
-import Seed from "./routes/seed.tsx";
-import NoMatch from "./routes/404.tsx";
-import Setup from "./routes/accounts/setup.tsx";
-import Tokens from "./routes/accounts/tokens.tsx";
-import History from "./routes/accounts/history.tsx";
-import Faucet from "./routes/more/faucet.tsx";
-import Classes from "./routes/more/classes.tsx";
-import Contracts from "./routes/more/contracts.tsx";
-import Calls from "./routes/more/calls.tsx";
-import { AccountsProvider } from "./helpers/accounts.tsx";
+import Signin from "./routes/signin";
+import More from "./routes/more";
+import Accounts from "./routes/accounts";
+import Transactions from "./routes/transactions";
+import Notifier from "./routes/notifier";
+import { AuthProvider, ProtectedRoute } from "./helpers/authn";
+import Login from "./routes/login";
+import Seed from "./routes/seed";
+import NoMatch from "./routes/404";
+import Setup from "./routes/accounts/setup";
+import Tokens from "./routes/accounts/tokens";
+import History from "./routes/accounts/history";
+import Faucet from "./routes/more/faucet";
+import Classes from "./routes/more/classes";
+import Contracts from "./routes/more/contracts";
+import Calls from "./routes/more/calls";
+import { AccountsProvider } from "./helpers/accounts";
 import { classNames as helpersClassNames } from "@0xknwn/starknet-test-helpers";
-import { PollingProvider } from "./helpers/polling.tsx";
+import { PollingProvider } from "./helpers/polling";
 
 export const App = () => {
   return (
