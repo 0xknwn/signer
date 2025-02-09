@@ -35,16 +35,14 @@ app.post(
   }
 );
 
-app.get(
-  "/message",
-  async (request: ExpressRequest, response: ExpessResponse) => {
-    const out = pipe.shift();
-    if (!out) {
-      return response.status(200).send(`{}`);
-    }
-    response.status(200).send(out);
+app.get("/message", async (_: ExpressRequest, response: ExpessResponse) => {
+  const out = pipe.shift();
+  if (!out) {
+    response.status(200).send(`{}`);
+    return;
   }
-);
+  response.status(200).send(out);
+});
 
 app
   .listen(PORT, () => {
