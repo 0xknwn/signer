@@ -17,6 +17,11 @@ import {
   verify,
   hex2buf,
 } from "@0xknwn/connect-api";
+import {
+  type SignerProps,
+  type ChannelProps,
+  useAuthn,
+} from "../../../helpers/authn_context";
 
 const baseURL = import.meta.env.VITE_API_URL || "/api";
 
@@ -68,12 +73,6 @@ enum ConnectionState {
   ChannelExpired = "channelexpired",
 }
 
-type SignerProps = {
-  identityKey: CryptoKeyPair;
-  sharingKey: CryptoKeyPair;
-  encryptionKey: CryptoKey;
-};
-
 type CallbackProps = {
   setConnectionState: (state: ConnectionState) => void;
   setPin: (pin: string) => void;
@@ -83,6 +82,7 @@ type CallbackProps = {
   setChannelID: (channelID: string) => void;
   setReceivedMessages: (messages: { [nonce: string]: boolean }) => void;
   setMessages: (messages: any[]) => void;
+  addOrReplaceChannel: (value: { [key: string]: ChannelProps }) => void;
 };
 
 const connect = async (pin: string, callback: CallbackProps) => {
@@ -123,7 +123,13 @@ const accept = async (
     console.error("Cannot accept request without agentEncryptionPublicKey");
     return;
   }
-  const { setPin4, setConnectionState, setChannelID, setSigner } = callback;
+  const {
+    setPin4,
+    setConnectionState,
+    setChannelID,
+    setSigner,
+    addOrReplaceChannel,
+  } = callback;
   const pin4 = Math.floor(Math.random() * 10000)
     .toString()
     .padStart(4, "0");
@@ -168,14 +174,16 @@ const accept = async (
     return;
   }
   setChannelID(channelID);
-  setSigner({
+  const signer = {
     identityKey: {
       publicKey: identityPublicKey,
       privateKey: identityPrivateKey,
     },
     encryptionKey,
     sharingKey: { publicKey: sharingPublicKey, privateKey: sharingPrivateKey },
-  });
+  };
+  setSigner(signer);
+  addOrReplaceChannel({ [channelID]: { dapp: app, signer } });
 };
 
 // @todo: check why we do not receive multiple messages when there are several
@@ -236,6 +244,7 @@ const query = async (
 };
 
 const Messages = () => {
+  const { addOrReplaceChannel } = useAuthn();
   const [pin, setPin] = useState("");
   const [pin4, setPin4] = useState("");
   const [app, setApp] = useState({} as acknowledgeChannelRequestResult | null);
@@ -257,6 +266,7 @@ const Messages = () => {
     setChannelID,
     setReceivedMessages,
     setMessages,
+    addOrReplaceChannel,
   };
 
   useEffect(() => {
