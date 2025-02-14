@@ -20,6 +20,7 @@
     "react-dom": "19.0.0"
   },
   "devDependencies": {
+    "@0xknwn/connect-api": "^0.0.12",
     "@0xknwn/starknet-modular-account": "^0.2.5",
     "@0xknwn/starknet-test-helpers": "^0.2.5",
     "@eslint/js": "^9.17.0",
