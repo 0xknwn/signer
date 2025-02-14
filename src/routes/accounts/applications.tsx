@@ -124,7 +124,7 @@ const accept = async (
     return;
   }
   const { setPin4, setConnectionState, setChannelID, setSigner } = callback;
-  const pin4 = Math.floor(Math.random() * 1000)
+  const pin4 = Math.floor(Math.random() * 10000)
     .toString()
     .padStart(4, "0");
   setPin4(pin4);
