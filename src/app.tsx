@@ -12,7 +12,9 @@ import Setup from "./routes/accounts/setup";
 import Tokens from "./routes/accounts/tokens";
 import History from "./routes/accounts/history";
 import Messages from "./routes/notifier/messages";
-import Applications from "./routes/accounts/applications";
+import Channels from "./routes/accounts/channels";
+import NewChannel from "./routes/accounts/channel_tabs/new";
+import ChannelList from "./routes/accounts/channel_tabs/list";
 import Faucet from "./routes/more/faucet";
 import Classes from "./routes/more/classes";
 import Contracts from "./routes/more/contracts";
@@ -85,13 +87,39 @@ export const App = () => {
                 }
               />
               <Route
-                path="applications"
+                path="channels"
                 element={
                   <ProtectedRoute>
-                    <Applications />
+                    <Channels />
                   </ProtectedRoute>
                 }
-              />
+              >
+                <Route
+                  index
+                  element={
+                    <ProtectedRoute>
+                      <NewChannel />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="new"
+                  element={
+                    <ProtectedRoute>
+                      <NewChannel />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="list"
+                  element={
+                    <ProtectedRoute>
+                      <ChannelList />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="*" element={<NoMatch />} />
+              </Route>
               <Route
                 path="history"
                 element={

@@ -3,13 +3,23 @@ import { useState, useEffect } from "react";
 import { decrypt, encrypt } from "./encryption";
 import { store } from "./store";
 
-import { AuthContext, useAuthn } from "./authn_context";
+import { AuthContext, useAuthn, type ChannelProps } from "./authn_context";
 
 type AuthProviderProps = {
   children: React.ReactNode;
 };
 
+// @todo: persist the channels in local storage
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [channels, setChannels] = useState(
+    {} as { [channelID: string]: ChannelProps }
+  );
+
+  const addOrReplaceChannel = (value: {
+    [channelID: string]: ChannelProps;
+  }) => {
+    setChannels({ ...channels, ...value });
+  };
   const navigate = useNavigate();
   const [challenge, setChallenge] = useState(
     localStorage.getItem(store.challenge) ?? ""
@@ -69,6 +79,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, [verifier]);
 
   useEffect(() => {
+    Object.keys(channels).forEach((k) => {
+      console.log(k, channels[k].dapp?.agentPublicKey);
+    });
+  }, [channels]);
+
+  useEffect(() => {
     if (!challenge || challenge === "") {
       const id = self.crypto.randomUUID();
       localStorage.setItem(store.challenge, id);
@@ -88,6 +104,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const value = {
+    channels,
+    addOrReplaceChannel,
     challenge,
     verifier,
     cipher,
