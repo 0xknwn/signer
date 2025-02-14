@@ -12,7 +12,7 @@ import Setup from "./routes/accounts/setup";
 import Tokens from "./routes/accounts/tokens";
 import History from "./routes/accounts/history";
 import Messages from "./routes/notifier/messages";
-import Applications from "./routes/notifier/applications";
+import Applications from "./routes/accounts/applications";
 import Faucet from "./routes/more/faucet";
 import Classes from "./routes/more/classes";
 import Contracts from "./routes/more/contracts";
@@ -85,6 +85,14 @@ export const App = () => {
                 }
               />
               <Route
+                path="applications"
+                element={
+                  <ProtectedRoute>
+                    <Applications />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="history"
                 element={
                   <ProtectedRoute>
@@ -123,14 +131,6 @@ export const App = () => {
                 element={
                   <ProtectedRoute>
                     <Messages />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="applications"
-                element={
-                  <ProtectedRoute>
-                    <Applications />
                   </ProtectedRoute>
                 }
               />
