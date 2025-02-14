@@ -11,6 +11,8 @@ import NoMatch from "./routes/404";
 import Setup from "./routes/accounts/setup";
 import Tokens from "./routes/accounts/tokens";
 import History from "./routes/accounts/history";
+import Messages from "./routes/notifier/messages";
+import Applications from "./routes/notifier/applications";
 import Faucet from "./routes/more/faucet";
 import Classes from "./routes/more/classes";
 import Contracts from "./routes/more/contracts";
@@ -107,7 +109,33 @@ export const App = () => {
                   <Notifier />
                 </ProtectedRoute>
               }
-            />
+            >
+              <Route
+                index
+                element={
+                  <ProtectedRoute>
+                    <Messages />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="messages"
+                element={
+                  <ProtectedRoute>
+                    <Messages />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="applications"
+                element={
+                  <ProtectedRoute>
+                    <Applications />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<NoMatch />} />
+            </Route>
             {import.meta.env.MODE === "development" && (
               <Route
                 path="more"

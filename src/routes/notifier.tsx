@@ -4,7 +4,7 @@ import Markdown from "markdown-to-jsx";
 import { content } from "./notifier.help";
 
 import { useState } from "react";
-import NotificationList from "../components/notification_list";
+import { NavLink, Outlet } from "react-router";
 
 function Notifier() {
   const [help, setHelp] = useState(false);
@@ -19,7 +19,23 @@ function Notifier() {
       >
         {help ? "Hide help" : "Show help"}
       </button>
-      {help ? <Markdown>{content}</Markdown> : <NotificationList />}
+      {help ? (
+        <>
+          <Markdown>{content}</Markdown>
+        </>
+      ) : (
+        <>
+          <nav>
+            <NavLink className="tab" to="messages">
+              Messages
+            </NavLink>
+            <NavLink className="tab" to="applications">
+              Applications
+            </NavLink>
+          </nav>
+          <Outlet />
+        </>
+      )}
     </>
   );
 }
