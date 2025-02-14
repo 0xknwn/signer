@@ -3,7 +3,7 @@
 Data are collected to provide our service. This document details those data. It
 also explains how they are used and protected.
 
-### Private data
+## Private data
 
 Signin to our service requires you acknowlege we store a number of private data.
 
@@ -30,7 +30,7 @@ Those informations can be publicly found on networks and are considered as
 public even if, in those cases, they are sensitive, especially if you can
 link them to the person that is holding those.
 
-### Liability
+## Liability
 
 We do not use any know-your-customer procedure with our users, like many other
 services. The reason is that we do not store any data that would allow us to
