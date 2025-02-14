@@ -1,5 +1,3 @@
-import NotificationList from "../../components/notification_list";
-
 function Messages() {
   return (
     <>
