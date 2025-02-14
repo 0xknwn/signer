@@ -8,4 +8,17 @@ export default defineConfig({
   test: {
     environment: "jsdom",
   },
+  server: {
+    proxy: {
+      "/rpc": {
+        target: "http://localhost:5050",
+        changeOrigin: true,
+      },
+      "/api": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
 });
