@@ -29,9 +29,6 @@ function Notifier() {
             <NavLink className="tab" to="messages">
               Messages
             </NavLink>
-            <NavLink className="tab" to="applications">
-              Applications
-            </NavLink>
           </nav>
           <Outlet />
         </>

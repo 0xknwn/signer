@@ -30,6 +30,9 @@ function Account() {
             <NavLink className="tab" to="tokens">
               Tokens
             </NavLink>
+            <NavLink className="tab" to="applications">
+              Dapps
+            </NavLink>
             <NavLink className="tab" to="history">
               History
             </NavLink>
