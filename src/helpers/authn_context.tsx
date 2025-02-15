@@ -19,13 +19,20 @@ export const AuthContext = createContext<{
   cipher: CryptoKey | null;
   passphrase: string;
   addOrReplaceChannel: (value: { [channelID: string]: ChannelProps }) => void;
+  addChannelReceivedMessage: (channelID: string, nonce: string) => void;
+  hasChannelReceivedMessage: (channelID: string, nonce: string) => boolean;
+  addChannelMessage: (channelID: string, message: any) => void;
   setPassphrase: (value: string) => void;
   setVerifier: (value: string) => void;
   verify: (key: CryptoKey | null) => Promise<boolean>;
   resetWallet: () => void;
+  messages: { [channelID: string]: any[] };
 }>({
   channels: {},
   addOrReplaceChannel: () => {},
+  addChannelReceivedMessage: () => {},
+  hasChannelReceivedMessage: () => false,
+  addChannelMessage: () => {},
   challenge: "",
   verifier: "",
   cipher: null,
@@ -34,6 +41,7 @@ export const AuthContext = createContext<{
   setVerifier: () => {},
   verify: async () => false,
   resetWallet: () => {},
+  messages: {},
 });
 
 export const useAuthn = () => {

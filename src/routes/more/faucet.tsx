@@ -28,6 +28,8 @@ function Faucet() {
 
   // @todo: move the refresh in a subcomponent to avoid rebuilding the whole
   // component tree every second while monitoring a transaction
+  // @todo: move the logic to the connect dapp because it is not specific to
+  // the signer
   useEffect(() => {
     if (transactionHash === "0x0") {
       return;

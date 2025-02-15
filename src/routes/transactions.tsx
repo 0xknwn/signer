@@ -3,7 +3,6 @@ import Markdown from "markdown-to-jsx";
 import { useEffect, useState } from "react";
 import { RpcProvider, shortString, Call, CallData } from "starknet";
 import { content } from "./transactions.help";
-// import { ChainId } from "@starknet-io/types-js";
 import { useAccounts } from "../helpers/account_context";
 import { useAuthn } from "../helpers/authn_context";
 import { getKeys } from "../helpers/encryption";

@@ -11,11 +11,6 @@ import {
   generateEncryptionKey,
   generateChannelID,
   channelRequestUniqueKeys,
-  channelUniqueKeys,
-  queryMessagesResult,
-  queryMessages,
-  verify,
-  hex2buf,
 } from "@0xknwn/connect-api";
 import {
   type SignerProps,
@@ -51,17 +46,6 @@ const generateECDHKey = async (namedCurve = "P-256") => {
   return { publicKey, privateKey };
 };
 
-const importVerifyinghKeyFromHex = async (key: string) => {
-  const rawKey = hex2buf(key);
-  return window.crypto.subtle.importKey(
-    "raw",
-    rawKey,
-    { name: "ECDSA", namedCurve: "P-256" },
-    true,
-    ["verify"]
-  );
-};
-
 enum ConnectionState {
   Initializing = "initializing",
   NoRequests = "norequests",
@@ -80,8 +64,6 @@ type CallbackProps = {
   setApp: (app: acknowledgeChannelRequestResult | null) => void;
   setSigner: (signer: SignerProps | null) => void;
   setChannelID: (channelID: string) => void;
-  setReceivedMessages: (messages: { [nonce: string]: boolean }) => void;
-  setMessages: (messages: any[]) => void;
   addOrReplaceChannel: (value: { [key: string]: ChannelProps }) => void;
 };
 
@@ -186,63 +168,6 @@ const accept = async (
   addOrReplaceChannel({ [channelID]: { dapp: app, signer } });
 };
 
-// @todo: check why we do not receive multiple messages when there are several
-// pending messages.
-// @todo: automate the query every 5 secs instead of the button click
-const query = async (
-  app: acknowledgeChannelRequestResult,
-  channelID: string,
-  receivedMessages: { [nonce: string]: boolean },
-  messages: any[],
-  callback: CallbackProps
-) => {
-  if (Math.floor(Date.now() / 1000) >= app.deadline) {
-    console.log("Deadline reached, channel has expired");
-    const { setConnectionState } = callback;
-    setConnectionState(ConnectionState.ChannelExpired);
-    return;
-  }
-  const keys = await channelUniqueKeys(app.relyingParty, channelID);
-  const response = await queryMessages(baseURL, 3, {
-    channelUniqueKeys: keys,
-  });
-  if (!response.ok) {
-    console.error(await response.json());
-    throw new Error("Unexpected Error calling API");
-  }
-  const payload = await response.json();
-  if (payload.error && payload.error.code === -32003) {
-    return [];
-  }
-  if (payload.error) {
-    throw new Error("Unexpected Error calling API" + payload.error);
-  }
-  const result = payload.result as queryMessagesResult;
-  const { setReceivedMessages, setMessages } = callback;
-  if (Array.isArray(result.messages)) {
-    const verifyingKey = await importVerifyinghKeyFromHex(app.agentPublicKey);
-    for (let [idx, _] of result.messages.entries()) {
-      const message = result.messages[idx];
-      const signature = result.messageSignatures[idx];
-      const verified = await verify(verifyingKey, message, signature);
-      const jsonMessage = JSON.parse(message);
-      console.log(
-        "receivedMessages",
-        jsonMessage.nonce,
-        receivedMessages[jsonMessage.nonce]
-      );
-      if (receivedMessages[jsonMessage.nonce]) {
-        continue;
-      }
-      setReceivedMessages({ ...receivedMessages, [jsonMessage.nonce]: true });
-      if (!verified) {
-        console.error("Message not verified");
-      }
-      setMessages([...messages, message]);
-    }
-  }
-};
-
 const Messages = () => {
   const { addOrReplaceChannel } = useAuthn();
   const [pin, setPin] = useState("");
@@ -253,10 +178,6 @@ const Messages = () => {
   const [connectionState, setConnectionState] = useState(
     ConnectionState.Initializing
   );
-  const [receivedMessages, setReceivedMessages] = useState(
-    {} as { [nonce: string]: boolean }
-  );
-  const [messages, setMessages] = useState([] as any[]);
   const callback = {
     setConnectionState,
     setPin,
@@ -264,8 +185,6 @@ const Messages = () => {
     setPin4,
     setSigner,
     setChannelID,
-    setReceivedMessages,
-    setMessages,
     addOrReplaceChannel,
   };
 
@@ -380,28 +299,6 @@ const Messages = () => {
           >
             Reset
           </button>
-          <button
-            onClick={() => {
-              if (!app) {
-                console.log("no app");
-                return;
-              }
-              query(
-                app as acknowledgeChannelRequestResult,
-                channelID,
-                receivedMessages,
-                messages,
-                callback
-              );
-            }}
-          >
-            Receive
-          </button>
-          <ul>
-            {messages.map((msg, idx) => (
-              <li key={idx}>{JSON.stringify(msg)}</li>
-            ))}
-          </ul>
         </>
       ) : connectionState === ConnectionState.ChannelExpired ? (
         <>
