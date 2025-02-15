@@ -2,17 +2,38 @@ import { useLocation, useNavigate, Navigate } from "react-router";
 import { useState, useEffect } from "react";
 import { decrypt, encrypt } from "./encryption";
 import { store } from "./store";
-
+import Refreshers from "./refreshers";
 import { AuthContext, useAuthn, type ChannelProps } from "./authn_context";
 
 type AuthProviderProps = {
   children: React.ReactNode;
 };
 
+// @todo: enable store in the API to recover on another devide
+// @todo: check when the network or api are down and add a banner to the UI
+// so that people can understand what is happening
+// @todo: deploy on sepolia on the vercel URL
 // @todo: persist the channels in local storage
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [channels, setChannels] = useState(
     {} as { [channelID: string]: ChannelProps }
+  );
+
+  const [channelMessages, setChannelMessages] = useState(
+    {} as { [channelID: string]: any[] }
+  );
+
+  useEffect(() => {
+    for (const channelID in channelMessages) {
+      if (!channelMessages[channelID]) {
+        return;
+      }
+      const messages = channelMessages[channelID];
+      console.log(messages);
+    }
+  }, [channelMessages]);
+  const [channelReceivedMessages, setChannelReceivedMessages] = useState(
+    {} as { [channelID: string]: { [nonce: string]: boolean } }
   );
 
   const addOrReplaceChannel = (value: {
@@ -20,6 +41,32 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }) => {
     setChannels({ ...channels, ...value });
   };
+
+  const addChannelReceivedMessage = (channelID: string, nonce: string) => {
+    setChannelReceivedMessages({
+      ...channelReceivedMessages,
+      ...{
+        [channelID]: {
+          ...(channelReceivedMessages[channelID] ?? {}),
+          ...{ [nonce]: true },
+        },
+      },
+    });
+  };
+
+  const hasChannelReceivedMessage = (channelID: string, nonce: string) => {
+    return channelReceivedMessages[channelID]?.[nonce] ?? false;
+  };
+
+  const addChannelMessage = (channelID: string, message: any) => {
+    setChannelMessages({
+      ...channelMessages,
+      ...{
+        [channelID]: [...(channelMessages[channelID] ?? []), message],
+      },
+    });
+  };
+
   const navigate = useNavigate();
   const [challenge, setChallenge] = useState(
     localStorage.getItem(store.challenge) ?? ""
@@ -106,6 +153,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const value = {
     channels,
     addOrReplaceChannel,
+    addChannelReceivedMessage,
+    hasChannelReceivedMessage,
+    addChannelMessage,
     challenge,
     verifier,
     cipher,
@@ -114,9 +164,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setVerifier,
     verify,
     resetWallet,
+    messages: channelMessages,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      <Refreshers />
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 type ProtectedRouteProps = {
