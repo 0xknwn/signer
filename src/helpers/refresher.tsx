@@ -58,7 +58,7 @@ const query = async (
   const result = payload.result as queryMessagesResult;
   if (Array.isArray(result.messages)) {
     const verifyingKey = await importVerifyinghKeyFromHex(app.agentPublicKey);
-    for (let [idx, _] of result.messages.entries()) {
+    for (let idx in result.messages) {
       const message = result.messages[idx];
       const signature = result.messageSignatures[idx];
       const jsonMessage = JSON.parse(message);
@@ -83,7 +83,12 @@ type refresherProps = {
 
 const Refresher = (props: refresherProps) => {
   const { channelID, refresh } = props;
-  const { channels, messages } = useAuthn();
+  const {
+    channels,
+    messages,
+    lastChannelQueryTimestamp,
+    setLastChannelQueryTimestamp,
+  } = useAuthn();
   const {
     addChannelReceivedMessage,
     addChannelMessage,
@@ -96,17 +101,22 @@ const Refresher = (props: refresherProps) => {
   };
 
   useEffect(() => {
-    if (!channels[channelID] || !channels[channelID].dapp) {
+    if (
+      !channels[channelID] ||
+      !channels[channelID].dapp ||
+      lastChannelQueryTimestamp(channelID) > Math.floor(Date.now() / 1000) - 5
+    ) {
       return;
     }
+    setLastChannelQueryTimestamp(channelID, Math.floor(Date.now() / 1000));
     query(channels[channelID].dapp, channelID, callback);
-  }, [refresh, channelID, channels, messages]);
+  }, [refresh, channelID, channels]);
 
   return (
     <>
       <ul key={channelID}>
         {messages[channelID]?.map((v) => (
-          <li>{JSON.stringify(v)}</li>
+          <li key={v.nonce}>{JSON.stringify(v)}</li>
         ))}
       </ul>
     </>

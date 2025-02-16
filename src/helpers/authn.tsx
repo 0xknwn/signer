@@ -9,7 +9,7 @@ type AuthProviderProps = {
   children: React.ReactNode;
 };
 
-// @todo: enable store in the API to recover on another devide
+// @todo: enable store in the API to recover on another device
 // @todo: check when the network or api are down and add a banner to the UI
 // so that people can understand what is happening
 // @todo: deploy on sepolia on the vercel URL
@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       console.log(messages);
     }
   }, [channelMessages]);
+
   const [channelReceivedMessages, setChannelReceivedMessages] = useState(
     {} as { [channelID: string]: { [nonce: string]: boolean } }
   );
@@ -39,18 +40,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const addOrReplaceChannel = (value: {
     [channelID: string]: ChannelProps;
   }) => {
-    setChannels({ ...channels, ...value });
+    setChannels((previousChannels) => ({ ...previousChannels, ...value }));
   };
 
   const addChannelReceivedMessage = (channelID: string, nonce: string) => {
-    setChannelReceivedMessages({
-      ...channelReceivedMessages,
-      ...{
-        [channelID]: {
-          ...(channelReceivedMessages[channelID] ?? {}),
-          ...{ [nonce]: true },
+    setChannelReceivedMessages((previousChannelReceivedMessages) => {
+      return {
+        ...previousChannelReceivedMessages,
+        ...{
+          [channelID]: {
+            ...(previousChannelReceivedMessages[channelID] ?? {}),
+            ...{ [nonce]: true },
+          },
         },
-      },
+      };
     });
   };
 
@@ -59,12 +62,30 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const addChannelMessage = (channelID: string, message: any) => {
-    setChannelMessages({
-      ...channelMessages,
+    setChannelMessages((previousChannelMessages) => ({
+      ...previousChannelMessages,
       ...{
-        [channelID]: [...(channelMessages[channelID] ?? []), message],
+        [channelID]: [...(previousChannelMessages[channelID] ?? []), message],
       },
-    });
+    }));
+  };
+
+  const [channelQueryUnixTimestamp, setChannelQueryUnixTimestamp] = useState(
+    {} as { [channelID: string]: number }
+  );
+
+  const lastChannelQueryTimestamp = (channelID: string) => {
+    return channelQueryUnixTimestamp[channelID] ?? 0;
+  };
+
+  const setLastChannelQueryTimestamp = (
+    channelID: string,
+    timestamp: number
+  ) => {
+    setChannelQueryUnixTimestamp((previousChannelQueryUnixTimestamp) => ({
+      ...(previousChannelQueryUnixTimestamp ?? {}),
+      ...{ [channelID]: timestamp },
+    }));
   };
 
   const navigate = useNavigate();
@@ -165,6 +186,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     verify,
     resetWallet,
     messages: channelMessages,
+    lastChannelQueryTimestamp,
+    setLastChannelQueryTimestamp,
   };
 
   return (

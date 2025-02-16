@@ -91,7 +91,6 @@ const connect = async (pin: string, callback: CallbackProps) => {
     setPin("");
     return;
   }
-  console.log("Request acknowledged");
   setConnectionState(ConnectionState.RequestAcknowledged);
   setApp(result.result as acknowledgeChannelRequestResult);
 };
@@ -189,24 +188,16 @@ const Messages = () => {
   };
 
   useEffect(() => {
-    console.log("=== useEffect ===");
-  });
-
-  useEffect(() => {
-    console.log("=== useEffect ===");
     if (connectionState === ConnectionState.Initializing) {
-      console.log("=== 0 ===");
       return;
     }
     if (connectionState === ConnectionState.NoRequests) {
-      console.log("=== 1 ===");
       const interval = setInterval(() => {
         setConnectionState(ConnectionState.Initializing);
       }, 3000);
       return () => clearInterval(interval);
     }
     if (connectionState === ConnectionState.APIAcceptError) {
-      console.log("=== 2 ===");
       const interval = setInterval(() => {
         setConnectionState(ConnectionState.Initializing);
         setApp(null);
