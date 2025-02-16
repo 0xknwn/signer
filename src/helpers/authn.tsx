@@ -23,16 +23,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     {} as { [channelID: string]: any[] }
   );
 
-  useEffect(() => {
-    for (const channelID in channelMessages) {
-      if (!channelMessages[channelID]) {
-        return;
-      }
-      const messages = channelMessages[channelID];
-      console.log(messages);
-    }
-  }, [channelMessages]);
-
   const [channelReceivedMessages, setChannelReceivedMessages] = useState(
     {} as { [channelID: string]: { [nonce: string]: boolean } }
   );
@@ -145,12 +135,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setStatePassphrase("");
     navigate("/");
   }, [verifier]);
-
-  useEffect(() => {
-    Object.keys(channels).forEach((k) => {
-      console.log(k, channels[k].dapp?.agentPublicKey);
-    });
-  }, [channels]);
 
   useEffect(() => {
     if (!challenge || challenge === "") {

@@ -83,12 +83,8 @@ type refresherProps = {
 
 const Refresher = (props: refresherProps) => {
   const { channelID, refresh } = props;
-  const {
-    channels,
-    messages,
-    lastChannelQueryTimestamp,
-    setLastChannelQueryTimestamp,
-  } = useAuthn();
+  const { channels, lastChannelQueryTimestamp, setLastChannelQueryTimestamp } =
+    useAuthn();
   const {
     addChannelReceivedMessage,
     addChannelMessage,
@@ -112,15 +108,7 @@ const Refresher = (props: refresherProps) => {
     query(channels[channelID].dapp, channelID, callback);
   }, [refresh, channelID, channels]);
 
-  return (
-    <>
-      <ul key={channelID}>
-        {messages[channelID]?.map((v) => (
-          <li key={v.nonce}>{JSON.stringify(v)}</li>
-        ))}
-      </ul>
-    </>
-  );
+  return <></>;
 };
 
 export default Refresher;
