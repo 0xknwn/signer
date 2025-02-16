@@ -46,7 +46,7 @@ const NotificationOfExecution = ({
     }
     const fetchStatus = async () => {
       const provider = new RpcProvider({
-        nodeUrl: "http://localhost:5173/rpc",
+        nodeUrl: window.location.origin + "/api/sepolia",
       });
       const { execution_status } = await provider.getTransactionStatus(
         transaction

@@ -70,7 +70,7 @@ function Deploy({ className }: Props) {
     const fetchDeclaredStatus = async () => {
       if (classHash === "0x0") return;
       const provider = new RpcProvider({
-        nodeUrl: "http://localhost:5173/rpc",
+        nodeUrl: window.location.origin + "/api/sepolia",
       });
       await provider.getClassByHash(classHash);
       setIsDeclared(true);
@@ -82,7 +82,7 @@ function Deploy({ className }: Props) {
     const fetchDeploymentStatus = async () => {
       if (contractAddress === "0x0") return;
       const provider = new RpcProvider({
-        nodeUrl: "http://localhost:5173/rpc",
+        nodeUrl: window.location.origin + "/api/sepolia",
       });
       const hash = await provider.getClassHashAt(contractAddress);
       if (hash === classHash) {
@@ -97,7 +97,9 @@ function Deploy({ className }: Props) {
 
   const deployContract = async () => {
     setStatus("RUNNING");
-    const provider = new RpcProvider({ nodeUrl: "http://localhost:5173/rpc" });
+    const provider = new RpcProvider({
+      nodeUrl: window.location.origin + "/api/sepolia",
+    });
     const account = new Account(
       provider,
       seed0z.address,

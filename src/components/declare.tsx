@@ -46,7 +46,7 @@ function Declare({ className }: Props) {
   useEffect(() => {
     const fetchDeclaredStatus = async () => {
       const provider = new RpcProvider({
-        nodeUrl: "http://localhost:5173/rpc",
+        nodeUrl: window.location.origin + "/api/sepolia",
       });
       try {
         const d = await provider.getClassByHash(classHash);
@@ -64,7 +64,9 @@ function Declare({ className }: Props) {
 
   const declareSmartr = async () => {
     setStatus("RUNNING");
-    const provider = new RpcProvider({ nodeUrl: "http://localhost:5173/rpc" });
+    const provider = new RpcProvider({
+      nodeUrl: window.location.origin + "/api/sepolia",
+    });
     const a = new Account(
       provider,
       seed0z.address,

@@ -21,7 +21,7 @@ import {
 import { usePolling } from "../helpers/polling_context";
 
 function Transactions() {
-  const providerURL = "http://localhost:5173/rpc";
+  const providerURL = window.location.origin + "/api/sepolia";
   const provider = new RpcProvider({ nodeUrl: providerURL });
   const [help, setHelp] = useState(false);
   const [feeEstimate, setFeeEstimate] = useState(0n);

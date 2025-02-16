@@ -12,8 +12,8 @@ type AuthProviderProps = {
 // @todo: enable store in the API to recover on another device
 // @todo: check when the network or api are down and add a banner to the UI
 // so that people can understand what is happening
-// @todo: deploy on sepolia on the vercel URL
 // @todo: persist the channels in local storage
+// @todo: deploy on sepolia on the vercel URL
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [channels, setChannels] = useState(
     {} as { [channelID: string]: ChannelProps }
