@@ -9,7 +9,7 @@ import {
   hex2buf,
 } from "@0xknwn/connect-api";
 
-const baseURL = import.meta.env.VITE_API_URL || "/api";
+const baseURL = "/api/api";
 
 const importVerifyinghKeyFromHex = async (key: string) => {
   const rawKey = hex2buf(key);

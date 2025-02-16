@@ -18,7 +18,7 @@ import {
   useAuthn,
 } from "../../../helpers/authn_context";
 
-const baseURL = import.meta.env.VITE_API_URL || "/api";
+const baseURL = "/api/api";
 
 // @todo: replace with actual account address
 const accountAddress = "0x1";
