@@ -27,6 +27,8 @@ export const AuthContext = createContext<{
   verify: (key: CryptoKey | null) => Promise<boolean>;
   resetWallet: () => void;
   messages: { [channelID: string]: any[] };
+  setLastChannelQueryTimestamp: (channelID: string, timestamp: number) => void;
+  lastChannelQueryTimestamp: (channelID: string) => number;
 }>({
   channels: {},
   addOrReplaceChannel: () => {},
@@ -42,6 +44,8 @@ export const AuthContext = createContext<{
   verify: async () => false,
   resetWallet: () => {},
   messages: {},
+  setLastChannelQueryTimestamp: () => {},
+  lastChannelQueryTimestamp: () => 0,
 });
 
 export const useAuthn = () => {
