@@ -29,7 +29,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         return;
       }
       const messages = channelMessages[channelID];
-      console.log(messages);
     }
   }, [channelMessages]);
 
@@ -145,12 +144,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setStatePassphrase("");
     navigate("/");
   }, [verifier]);
-
-  useEffect(() => {
-    Object.keys(channels).forEach((k) => {
-      console.log(k, channels[k].dapp?.agentPublicKey);
-    });
-  }, [channels]);
 
   useEffect(() => {
     if (!challenge || challenge === "") {
