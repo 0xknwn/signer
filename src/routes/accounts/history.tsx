@@ -56,7 +56,7 @@ const Transaction = ({ transaction, refresh }: TransactionProps) => {
     const fetchStatus = async () => {
       setStatus("REFRESHING");
       const provider = new RpcProvider({
-        nodeUrl: "http://localhost:5173/rpc",
+        nodeUrl: window.location.origin + "/api/sepolia",
       });
       const { execution_status } = await provider.getTransactionStatus(
         transaction

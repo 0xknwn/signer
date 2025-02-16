@@ -20,7 +20,7 @@ type AccountsProviderProps = {
 };
 
 export const AccountsProvider = ({ children }: AccountsProviderProps) => {
-  const providerURL = "http://localhost:5173/rpc";
+  const providerURL = "window.location.origin + "/api/sepolia"";
   const provider = new RpcProvider({ nodeUrl: providerURL });
   const [accounts, setAccounts] = useState([] as account[]);
   const [selectedAccountNumber, setSelectedAccountNumber] = useState(0);

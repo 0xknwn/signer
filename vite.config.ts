@@ -10,9 +10,10 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/rpc": {
+      "/api/sepolia": {
         target: "http://localhost:5050",
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/sepolia/, ""),
       },
       "/api/api": {
         target: "http://localhost:8080",
