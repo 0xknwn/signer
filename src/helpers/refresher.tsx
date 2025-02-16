@@ -83,12 +83,8 @@ type refresherProps = {
 
 const Refresher = (props: refresherProps) => {
   const { channelID, refresh } = props;
-  const {
-    channels,
-    messages,
-    lastChannelQueryTimestamp,
-    setLastChannelQueryTimestamp,
-  } = useAuthn();
+  const { channels, lastChannelQueryTimestamp, setLastChannelQueryTimestamp } =
+    useAuthn();
   const {
     addChannelReceivedMessage,
     addChannelMessage,

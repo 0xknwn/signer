@@ -23,15 +23,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     {} as { [channelID: string]: any[] }
   );
 
-  useEffect(() => {
-    for (const channelID in channelMessages) {
-      if (!channelMessages[channelID]) {
-        return;
-      }
-      const messages = channelMessages[channelID];
-    }
-  }, [channelMessages]);
-
   const [channelReceivedMessages, setChannelReceivedMessages] = useState(
     {} as { [channelID: string]: { [nonce: string]: boolean } }
   );
