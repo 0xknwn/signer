@@ -70,7 +70,9 @@ const Calls = ({ name: className }: Props) => {
 
   useEffect(() => {
     if (contractAddress === "0x0") return;
-    const provider = new RpcProvider({ nodeUrl: "window.location.origin + "/api/sepolia"" });
+    const provider = new RpcProvider({
+      nodeUrl: window.location.origin + "/api/sepolia",
+    });
     const counter = new Contract(CounterABI, contractAddress, provider);
     const call = counter.populate("increment", {});
 
@@ -81,7 +83,7 @@ const Calls = ({ name: className }: Props) => {
     const fetchDeploymentStatus = async () => {
       if (contractAddress === "0x0") return;
       const provider = new RpcProvider({
-        nodeUrl: "window.location.origin + "/api/sepolia"",
+        nodeUrl: window.location.origin + "/api/sepolia",
       });
       try {
         const hash = await provider.getClassHashAt(contractAddress);

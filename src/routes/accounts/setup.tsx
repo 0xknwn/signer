@@ -29,7 +29,7 @@ function Setup() {
   };
 
   const { passphrase } = useAuthn();
-  const providerURL = "window.location.origin + "/api/sepolia"";
+  const providerURL = window.location.origin + "/api/sepolia";
 
   const runDeployAccount = async () => {
     setDeployedStatus("deploying");
